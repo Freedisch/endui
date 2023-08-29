@@ -1,10 +1,6 @@
-# Nextra Docs Template 
+# EndUI 
 
-This is a template for creating documentation with [Nextra](https://nextra.site).
-
-[**Live Demo →**](https://nextra-docs-template.vercel.app)
-
-[![](.github/screenshot.png)](https://nextra-docs-template.vercel.app)
+EndUI is a React-based UI library that helps you move fast during ui development with a both high level and low styling allowing you also extract the style of the different components.
 
 ## Quick Start
 
@@ -18,6 +14,20 @@ First, run `pnpm i` to install the dependencies.
 
 Then, run `pnpm dev` to start the development server and visit localhost:3000.
 
+## Contributing Guidelines
+
+Any contributions you make are truly appreciated, go to our [CONTRIBUTING.md](https://github.com/ALU-Opportunity-Board/opportunity-board/blob/develop/CONTRIBUTING.md) file for more information.
+
+## Code of Conduct
+
+View [CODE_OF_CONDUCT.md](https://github.com/ALU-Opportunity-Board/opportunity-board/blob/develop/CODE_OF_CONDUCT.md)
+
 ## License
 
-This project is licensed under the MIT License.
+opportunity-board is licensed under the MIT License - see the [LICENSE](https://github.com/ALU-Opportunity-Board/opportunity-board/blob/main/LICENSE) file for details.
+
+## Thanks to all Contributors
+
+<a href="https://github.com/freedisch/endui/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=freedisch/endui" />
+</a>
