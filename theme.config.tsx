@@ -2,14 +2,14 @@ import React from 'react'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 
 const config: DocsThemeConfig = {
-  logo: <span>My Project</span>,
+  logo: <span>EndUI</span>,
   project: {
-    link: 'https://github.com/shuding/nextra-docs-template',
+    link: 'https://github.com/freedisch/endui',
   },
   chat: {
-    link: 'https://discord.com',
+    link: 'https://discord.gg/dDSVr7HB4r',
   },
-  docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
+  docsRepositoryBase: 'https://github.com/freedisch',
   footer: {
     text: 'Nextra Docs Template',
   },
