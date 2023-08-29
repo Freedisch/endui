@@ -1,10 +1,6 @@
-# Nextra Docs Template 
+# EndUI 
 
-This is a template for creating documentation with [Nextra](https://nextra.site).
-
-[**Live Demo →**](https://nextra-docs-template.vercel.app)
-
-[![](.github/screenshot.png)](https://nextra-docs-template.vercel.app)
+EndUI is a React-based UI library that helps you move fast during ui development with a both high level and low styling allowing you also extract the style of the different components.
 
 ## Quick Start
 
