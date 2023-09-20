@@ -11,7 +11,7 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: 'https://github.com/freedisch',
   footer: {
-    text: 'Nextra Docs Template',
+    text: 'Made with Love 🥊',
   },
 }
 
