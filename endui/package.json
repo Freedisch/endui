@@ -1,8 +1,13 @@
 {
-  "name": "endui",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@endui/react",
+  "private": false,
+  "version": "0.0.1",
   "type": "module",
+  "main": "src/main.tsx",
+  "files": [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -10,10 +15,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.290.0",
+    "prettier": "^3.0.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.20.3",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
