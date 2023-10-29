@@ -1,0 +1,66 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js create .
+
+PATH: 
+  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\Go\bin;C:\flutter\bin;C:\Users\freep\AppData\Local\Microsoft\WindowsApps;C:\Users\freep\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\freep\AppData\Roaming\npm;C:\Users\freep\go\bin;C:\flutter\bin;
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.18.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: Name should not start with ".", got "."
+      at parsePackageName (C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:83671:11)
+      at coerceCreatePackageName (C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:83688:20)
+      at Object.<anonymous> (C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:83594:33)
+      at Generator.next (<anonymous>)
+      at step (C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:328:14
+      at new Promise (<anonymous>)
+      at new F (C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:5305:28)
+      at Object.<anonymous> (C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:307:12)
+      at Object.run (C:\Users\freep\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:83613:17)
+
+npm manifest: 
+  {
+    "name": "nextra-docs-template",
+    "version": "0.0.1",
+    "description": "Nextra docs template",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/shuding/nextra-docs-template.git"
+    },
+    "author": "Shu Ding <g@shud.in>",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/shuding/nextra-docs-template/issues"
+    },
+    "homepage": "https://github.com/shuding/nextra-docs-template#readme",
+    "dependencies": {
+      "next": "^13.0.6",
+      "nextra": "latest",
+      "nextra-theme-docs": "latest",
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+      "@types/node": "18.11.10",
+      "typescript": "^4.9.3"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
