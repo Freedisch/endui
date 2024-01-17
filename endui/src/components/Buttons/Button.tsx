@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { VariantProps, cva } from 'class-variance-authority';
-import { cn } from '../utils/utils';
+import { cn } from '../../utils/utils';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 
