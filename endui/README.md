@@ -11,16 +11,21 @@ $ npm i @endui/react
 ## Example
 
 ```js
-const Float = require('float-ui');
+import {Button, buttonVariants} from '@endui/react;
 
-Float.createElement('HelloButton', {
-  render: function () {
-    return '<button>Hello ' + this.props.name + '</button>';
-  },
-});
+<Button variant="ghost" size="lg">
+  Hello world
+</Button>
 
-console.log(Float.renderElement('<HelloButton name="Phil" />'));
-// => <button>Hello Phil</button>
+
+<button className={buttonVariants({
+  variant: 'ghost',
+  className: 'w-fit',
+  size: 'lg',
+})}
+>
+  Hello button
+</button>
 ```
 
 ## API Documentation
@@ -61,7 +66,7 @@ Float.createElement('AwesomeButton', {
 });
 ```
 
-### extendElements(elements)
+### extendUIofComponents(elements)
 
 Add elements to the current Float instance from other Float instances.
 
