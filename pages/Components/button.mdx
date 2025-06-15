@@ -1,0 +1,118 @@
+# Button
+
+A versatile button component with multiple variants, sizes, and states.
+
+## Import
+
+```tsx
+import { Button, buttonVariants } from 'endui'
+```
+
+## Usage
+
+### Basic Button
+
+```tsx
+<Button>Click me</Button>
+```
+
+### Button Variants
+
+```tsx
+<Button variant="default">Default</Button>
+<Button variant="ghost">Ghost</Button>
+```
+
+### Button Sizes
+
+```tsx
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+```
+
+### Loading State
+
+```tsx
+<Button isLoading>Loading...</Button>
+```
+
+### Disabled State
+
+```tsx
+<Button disabled>Disabled</Button>
+```
+
+## API Reference
+
+### Button Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'ghost'` | `'default'` | Visual style variant |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Button size |
+| `isLoading` | `boolean` | `false` | Shows loading spinner |
+| `disabled` | `boolean` | `false` | Disables the button |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Button content |
+
+All standard HTML button attributes are also supported.
+
+### buttonVariants
+
+The `buttonVariants` function can be used to apply button styles to other elements:
+
+```tsx
+import { buttonVariants } from 'endui'
+
+<div className={buttonVariants({ variant: "ghost", size: "lg" })}>
+  Custom Element
+</div>
+```
+
+## Examples
+
+### Icon Button
+
+```tsx
+import { Search } from 'lucide-react'
+
+<Button variant="ghost" size="sm">
+  <Search className="h-4 w-4 mr-2" />
+  Search
+</Button>
+```
+
+### Button Group
+
+```tsx
+<div className="flex space-x-2">
+  <Button variant="default">Save</Button>
+  <Button variant="ghost">Cancel</Button>
+</div>
+```
+
+### Form Submit Button
+
+```tsx
+<form onSubmit={handleSubmit}>
+  <div className="space-y-4">
+    <Input placeholder="Enter your email" />
+    <Button type="submit" isLoading={isSubmitting} className="w-full">
+      {isSubmitting ? 'Signing In...' : 'Sign In'}
+    </Button>
+  </div>
+</form>
+```
+
+### Destructive Action
+
+```tsx
+<Button 
+  variant="ghost" 
+  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+  onClick={handleDelete}
+>
+  Delete Account
+</Button>
+```

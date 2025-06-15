@@ -1,0 +1,191 @@
+# Alert
+
+Display important messages and notifications to users with different severity levels.
+
+## Import
+
+```tsx
+import { Alert, AlertTitle, AlertDescription } from 'endui'
+```
+
+## Usage
+
+### Basic Alert
+
+```tsx
+<Alert>
+  <AlertTitle>Default Alert</AlertTitle>
+  <AlertDescription>
+    This is a default alert message.
+  </AlertDescription>
+</Alert>
+```
+
+### Alert Variants
+
+```tsx
+<Alert variant="success">
+  <AlertTitle>Success!</AlertTitle>
+  <AlertDescription>Your changes have been saved.</AlertDescription>
+</Alert>
+
+<Alert variant="warning">
+  <AlertTitle>Warning</AlertTitle>
+  <AlertDescription>This action cannot be undone.</AlertDescription>
+</Alert>
+
+<Alert variant="destructive">
+  <AlertTitle>Error</AlertTitle>
+  <AlertDescription>Something went wrong.</AlertDescription>
+</Alert>
+
+<Alert variant="info">
+  <AlertTitle>Information</AlertTitle>
+  <AlertDescription>Here's some helpful information.</AlertDescription>
+</Alert>
+```
+
+### Dismissible Alert
+
+```tsx
+<Alert variant="success" dismissible onDismiss={() => console.log('Dismissed')}>
+  <AlertTitle>Dismissible Alert</AlertTitle>
+  <AlertDescription>You can close this alert.</AlertDescription>
+</Alert>
+```
+
+### Simple Alert (Text Only)
+
+```tsx
+<Alert variant="info">
+  <AlertDescription>
+    Your session will expire in 5 minutes.
+  </AlertDescription>
+</Alert>
+```
+
+## API Reference
+
+### Alert Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'success' \| 'warning' \| 'destructive' \| 'info'` | `'default'` | Alert severity level |
+| `dismissible` | `boolean` | `false` | Shows close button |
+| `onDismiss` | `() => void` | - | Callback when dismissed |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Alert content |
+
+### Sub-components
+
+- **AlertTitle**: Renders an `h5` element for the alert title
+- **AlertDescription**: Renders a `div` for the alert description
+
+Both sub-components accept standard HTML attributes plus `className`.
+
+## Examples
+
+### Alert with Custom Content
+
+```tsx
+<Alert variant="info">
+  <AlertTitle>Update Available</AlertTitle>
+  <AlertDescription>
+    A new version is available. 
+    <Button variant="ghost" size="sm" className="ml-2">
+      Update Now
+    </Button>
+  </AlertDescription>
+</Alert>
+```
+
+### Form Validation Alert
+
+```tsx
+<Alert variant="destructive" className="mb-4">
+  <AlertTitle>Validation Error</AlertTitle>
+  <AlertDescription>
+    <ul className="mt-2 list-disc list-inside space-y-1">
+      <li>Email is required</li>
+      <li>Password must be at least 8 characters</li>
+    </ul>
+  </AlertDescription>
+</Alert>
+```
+
+### Loading Alert
+
+```tsx
+<Alert variant="info">
+  <AlertDescription className="flex items-center">
+    <LoadingSpinner size="sm" className="mr-2" />
+    Processing your request...
+  </AlertDescription>
+</Alert>
+```
+
+### Network Status Alert
+
+```tsx
+const [isOnline, setIsOnline] = useState(navigator.onLine)
+
+{!isOnline && (
+  <Alert variant="warning" className="fixed top-4 right-4 max-w-sm z-50">
+    <AlertTitle>Connection Lost</AlertTitle>
+    <AlertDescription>
+      You're currently offline. Some features may not work.
+    </AlertDescription>
+  </Alert>
+)}
+```
+
+### Success with Auto-dismiss
+
+```tsx
+const [showAlert, setShowAlert] = useState(true)
+
+useEffect(() => {
+  if (showAlert) {
+    const timer = setTimeout(() => setShowAlert(false), 5000)
+    return () => clearTimeout(timer)
+  }
+}, [showAlert])
+
+{showAlert && (
+  <Alert 
+    variant="success" 
+    dismissible 
+    onDismiss={() => setShowAlert(false)}
+  >
+    <AlertTitle>File Uploaded</AlertTitle>
+    <AlertDescription>
+      Your document has been successfully uploaded.
+    </AlertDescription>
+  </Alert>
+)}
+```
+
+### Alert Stack
+
+```tsx
+<div className="space-y-3">
+  <Alert variant="info">
+    <AlertDescription>System maintenance scheduled for tonight.</AlertDescription>
+  </Alert>
+  
+  <Alert variant="warning">
+    <AlertDescription>Your trial expires in 3 days.</AlertDescription>
+  </Alert>
+  
+  <Alert variant="success">
+    <AlertDescription>Profile updated successfully.</AlertDescription>
+  </Alert>
+</div>
+```
+
+## Accessibility
+
+- Alerts have `role="alert"` for screen readers
+- Icons provide visual context for different alert types
+- Dismissible alerts include proper focus management
+- Color is not the only way information is conveyed (icons + text)

@@ -1,0 +1,267 @@
+# Input
+
+Form input component with variants and proper accessibility features.
+
+## Import
+
+```tsx
+import { Input } from 'endui'
+```
+
+## Usage
+
+### Basic Input
+
+```tsx
+<Input placeholder="Enter your name" />
+```
+
+### Input Types
+
+```tsx
+<Input type="text" placeholder="Text input" />
+<Input type="email" placeholder="Email input" />
+<Input type="password" placeholder="Password input" />
+<Input type="number" placeholder="Number input" />
+<Input type="search" placeholder="Search..." />
+<Input type="tel" placeholder="Phone number" />
+<Input type="url" placeholder="Website URL" />
+```
+
+### Input Variants
+
+```tsx
+<Input variant="default" placeholder="Default input" />
+<Input variant="ghost" placeholder="Ghost input" />
+```
+
+### Input Sizes
+
+```tsx
+<Input size="sm" placeholder="Small input" />
+<Input size="default" placeholder="Default input" />
+<Input size="lg" placeholder="Large input" />
+```
+
+### Input States
+
+```tsx
+<Input placeholder="Default state" />
+<Input disabled placeholder="Disabled input" />
+<Input readOnly value="Read-only value" />
+<Input required placeholder="Required field" />
+```
+
+## API Reference
+
+### Input Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'ghost'` | `'default'` | Input visual style |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Input size |
+| `className` | `string` | - | Additional CSS classes |
+
+All standard HTML input attributes are also supported including:
+- `type`, `placeholder`, `value`, `defaultValue`
+- `disabled`, `readOnly`, `required`
+- `onChange`, `onFocus`, `onBlur`, `onKeyDown`
+- `min`, `max`, `step` (for number inputs)
+- `pattern` (for validation)
+
+## Examples
+
+### Form with Labels
+
+```tsx
+<div className="space-y-4">
+  <div>
+    <label htmlFor="email" className="block text-sm font-medium mb-2">
+      Email Address
+    </label>
+    <Input 
+      id="email" 
+      type="email" 
+      placeholder="Enter your email" 
+      required 
+    />
+  </div>
+  
+  <div>
+    <label htmlFor="password" className="block text-sm font-medium mb-2">
+      Password
+    </label>
+    <Input 
+      id="password" 
+      type="password" 
+      placeholder="Enter your password" 
+      required 
+    />
+  </div>
+</div>
+```
+
+### Search Input with Icon
+
+```tsx
+<div className="relative">
+  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+  <Input 
+    type="search"
+    placeholder="Search..."
+    className="pl-10"
+  />
+</div>
+```
+
+### Input with Validation
+
+```tsx
+const [email, setEmail] = useState('')
+const [error, setError] = useState('')
+
+const validateEmail = (value: string) => {
+  if (!value) {
+    setError('Email is required')
+  } else if (!/\S+@\S+\.\S+/.test(value)) {
+    setError('Please enter a valid email')
+  } else {
+    setError('')
+  }
+}
+
+<div>
+  <label htmlFor="email" className="block text-sm font-medium mb-2">
+    Email Address
+  </label>
+  <Input
+    id="email"
+    type="email"
+    value={email}
+    onChange={(e) => {
+      setEmail(e.target.value)
+      validateEmail(e.target.value)
+    }}
+    className={error ? 'border-red-500 focus:border-red-500' : ''}
+    placeholder="Enter your email"
+  />
+  {error && (
+    <p className="mt-1 text-sm text-red-600">{error}</p>
+  )}
+</div>
+```
+
+### Number Input with Controls
+
+```tsx
+<div>
+  <label htmlFor="quantity" className="block text-sm font-medium mb-2">
+    Quantity
+  </label>
+  <Input
+    id="quantity"
+    type="number"
+    min="1"
+    max="100"
+    step="1"
+    defaultValue="1"
+    className="w-24"
+  />
+</div>
+```
+
+### Input Group
+
+```tsx
+<div className="flex rounded-md shadow-sm">
+  <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+    https://
+  </span>
+  <Input
+    type="url"
+    placeholder="www.example.com"
+    className="rounded-l-none"
+  />
+</div>
+```
+
+### Textarea-style Input
+
+```tsx
+<div>
+  <label htmlFor="message" className="block text-sm font-medium mb-2">
+    Message
+  </label>
+  <textarea
+    id="message"
+    rows={4}
+    className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    placeholder="Enter your message..."
+  />
+</div>
+```
+
+### File Input
+
+```tsx
+<div>
+  <label htmlFor="file" className="block text-sm font-medium mb-2">
+    Upload File
+  </label>
+  <Input
+    id="file"
+    type="file"
+    accept=".pdf,.doc,.docx"
+    className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+  />
+</div>
+```
+
+### Controlled Input with Reset
+
+```tsx
+const [value, setValue] = useState('')
+
+<div className="relative">
+  <Input
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    placeholder="Type something..."
+  />
+  {value && (
+    <button
+      onClick={() => setValue('')}
+      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+    >
+      <X className="h-4 w-4" />
+    </button>
+  )}
+</div>
+```
+
+## Accessibility
+
+- Always use proper labels with `htmlFor` attribute
+- Include `required` attribute for required fields
+- Use appropriate `type` attributes for better mobile keyboards
+- Provide clear error messages for validation
+- Consider `aria-describedby` for additional help text
+- Use `autocomplete` attributes for better UX
+
+```tsx
+<div>
+  <label htmlFor="username" className="block text-sm font-medium mb-2">
+    Username
+  </label>
+  <Input
+    id="username"
+    type="text"
+    autoComplete="username"
+    aria-describedby="username-help"
+    required
+  />
+  <p id="username-help" className="mt-1 text-sm text-gray-600">
+    Choose a unique username with 3-20 characters
+  </p>
+</div>
+```

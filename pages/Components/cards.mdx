@@ -1,0 +1,186 @@
+# Card
+
+A flexible container component for organizing content with header, body, and footer sections.
+
+## Import
+
+```tsx
+import { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardDescription, 
+  CardContent, 
+  CardFooter 
+} from 'endui'
+```
+
+## Usage
+
+### Basic Card
+
+```tsx
+<Card>
+  <CardContent>
+    <p>This is a basic card.</p>
+  </CardContent>
+</Card>
+```
+
+### Complete Card
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Card Title</CardTitle>
+    <CardDescription>
+      This is a description of the card content.
+    </CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Main card content goes here.</p>
+  </CardContent>
+  <CardFooter>
+    <Button>Action</Button>
+  </CardFooter>
+</Card>
+```
+
+### Card Variants
+
+```tsx
+<Card variant="default">Default Card</Card>
+<Card variant="outline">Outline Card</Card>
+<Card variant="elevated">Elevated Card</Card>
+```
+
+### Card Sizes
+
+```tsx
+<Card size="sm">Small Card</Card>
+<Card size="default">Default Card</Card>
+<Card size="lg">Large Card</Card>
+```
+
+## API Reference
+
+### Card Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'outline' \| 'elevated'` | `'default'` | Visual style variant |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Card padding size |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Card content |
+
+### Sub-components
+
+All card sub-components accept standard HTML div attributes plus `className`.
+
+- **CardHeader**: Container for card title and description
+- **CardTitle**: Main card heading (renders as `h3`)
+- **CardDescription**: Card subtitle/description
+- **CardContent**: Main card body content
+- **CardFooter**: Card footer with actions
+
+## Examples
+
+### Product Card
+
+```tsx
+<Card variant="elevated" className="max-w-sm">
+  <CardHeader>
+    <CardTitle>Premium Plan</CardTitle>
+    <CardDescription>Perfect for growing teams</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <div className="text-3xl font-bold">
+      $29<span className="text-sm font-normal">/month</span>
+    </div>
+    <ul className="mt-4 space-y-2">
+      <li>✓ Unlimited projects</li>
+      <li>✓ Priority support</li>
+      <li>✓ Advanced analytics</li>
+    </ul>
+  </CardContent>
+  <CardFooter>
+    <Button className="w-full">Choose Plan</Button>
+  </CardFooter>
+</Card>
+```
+
+### User Profile Card
+
+```tsx
+<Card className="max-w-md">
+  <CardHeader className="text-center">
+    <div className="mx-auto h-20 w-20 rounded-full bg-gray-300 mb-4" />
+    <CardTitle>John Doe</CardTitle>
+    <CardDescription>Senior Frontend Developer</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-2 text-sm">
+      <div className="flex justify-between">
+        <span className="text-gray-600">Email:</span>
+        <span>john@example.com</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-gray-600">Location:</span>
+        <span>San Francisco, CA</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-gray-600">Joined:</span>
+        <span>January 2023</span>
+      </div>
+    </div>
+  </CardContent>
+  <CardFooter className="space-x-2">
+    <Button variant="ghost" className="flex-1">Message</Button>
+    <Button className="flex-1">Follow</Button>
+  </CardFooter>
+</Card>
+```
+
+### Stats Card
+
+```tsx
+<Card>
+  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+    <DollarSign className="h-4 w-4 text-muted-foreground" />
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold">$45,231.89</div>
+    <p className="text-xs text-muted-foreground">
+      +20.1% from last month
+    </p>
+  </CardContent>
+</Card>
+```
+
+### Interactive Card
+
+```tsx
+<Card className="cursor-pointer hover:shadow-md transition-shadow">
+  <CardHeader>
+    <CardTitle>Project Alpha</CardTitle>
+    <CardDescription>AI-powered analytics dashboard</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <div className="flex items-center space-x-4 text-sm">
+      <Badge variant="success">Active</Badge>
+      <span className="text-gray-600">Due: March 15</span>
+    </div>
+  </CardContent>
+  <CardFooter>
+    <div className="flex justify-between items-center w-full">
+      <div className="flex -space-x-2">
+        <div className="h-6 w-6 rounded-full bg-blue-500" />
+        <div className="h-6 w-6 rounded-full bg-green-500" />
+        <div className="h-6 w-6 rounded-full bg-purple-500" />
+      </div>
+      <span className="text-sm text-gray-600">3 members</span>
+    </div>
+  </CardFooter>
+</Card>
+```

@@ -1,0 +1,340 @@
+# Modal
+
+Accessible modal dialog component built on Radix UI primitives.
+
+## Import
+
+```tsx
+import { 
+  Modal, 
+  ModalTrigger, 
+  ModalContent, 
+  ModalHeader, 
+  ModalTitle, 
+  ModalDescription, 
+  ModalFooter,
+  ModalClose
+} from 'endui'
+```
+
+## Usage
+
+### Alert Modal
+
+```tsx
+const showAlert = (type: 'success' | 'error' | 'warning') => {
+  // This would typically be managed by a toast/notification system
+  // but can also be done with modals for critical alerts
+}
+
+<Modal>
+  <ModalTrigger asChild>
+    <Button>Show Alert</Button>
+  </ModalTrigger>
+  <ModalContent size="sm">
+    <ModalHeader>
+      <ModalTitle className="flex items-center space-x-2">
+        <AlertTriangle className="h-5 w-5 text-yellow-500" />
+        <span>Warning</span>
+      </ModalTitle>
+      <ModalDescription>
+        Your session is about to expire. Would you like to extend it?
+      </ModalDescription>
+    </ModalHeader>
+    <ModalFooter>
+      <ModalClose asChild>
+        <Button variant="ghost">Log Out</Button>
+      </ModalClose>
+      <Button>Extend Session</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+## Accessibility
+
+- Modal automatically traps focus within the dialog
+- Pressing `Escape` closes the modal
+- Clicking the backdrop closes the modal
+- `ModalTitle` is required for screen readers
+- Modal content is announced to screen readers when opened
+- Focus returns to the trigger element when closed
+
+## Best Practices
+
+1. **Always include a ModalTitle** - Required for accessibility
+2. **Use appropriate sizes** - Don't make modals too large or too small for their content
+3. **Provide clear actions** - Make it obvious how users can proceed or cancel
+4. **Handle loading states** - Show progress indicators for async operations
+5. **Consider mobile** - Ensure modals work well on smaller screens
+6. **Avoid nested modals** - Don't open modals from within other modals Basic Modal
+
+```tsx
+<Modal>
+  <ModalTrigger asChild>
+    <Button>Open Modal</Button>
+  </ModalTrigger>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Modal Title</ModalTitle>
+      <ModalDescription>
+        This is a modal description.
+      </ModalDescription>
+    </ModalHeader>
+    <div className="py-4">
+      <p>Modal content goes here.</p>
+    </div>
+    <ModalFooter>
+      <ModalClose asChild>
+        <Button variant="ghost">Cancel</Button>
+      </ModalClose>
+      <Button>Confirm</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+### Modal Sizes
+
+```tsx
+<ModalContent size="sm">Small Modal</ModalContent>
+<ModalContent size="default">Default Modal</ModalContent>
+<ModalContent size="lg">Large Modal</ModalContent>
+<ModalContent size="xl">Extra Large Modal</ModalContent>
+<ModalContent size="full">Full Screen Modal</ModalContent>
+```
+
+### Controlled Modal
+
+```tsx
+const [isOpen, setIsOpen] = useState(false)
+
+<Modal open={isOpen} onOpenChange={setIsOpen}>
+  <ModalTrigger asChild>
+    <Button>Open Controlled Modal</Button>
+  </ModalTrigger>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Controlled Modal</ModalTitle>
+    </ModalHeader>
+    <div className="py-4">
+      <p>This modal's state is controlled externally.</p>
+    </div>
+    <ModalFooter>
+      <Button onClick={() => setIsOpen(false)}>Close</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+## API Reference
+
+### Modal Props
+
+All Radix UI Dialog props are supported:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Open state change callback |
+| `defaultOpen` | `boolean` | `false` | Default open state |
+
+### ModalContent Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'sm' \| 'default' \| 'lg' \| 'xl' \| 'full'` | `'default'` | Modal size |
+| `className` | `string` | - | Additional CSS classes |
+
+### Sub-components
+
+- **ModalTrigger**: Button that opens the modal (use `asChild` for custom triggers)
+- **ModalContent**: Main modal container with backdrop
+- **ModalHeader**: Modal header section
+- **ModalTitle**: Modal title (required for accessibility)
+- **ModalDescription**: Modal description
+- **ModalFooter**: Modal footer with actions
+- **ModalClose**: Element that closes the modal (use `asChild` for custom elements)
+
+## Examples
+
+### Confirmation Modal
+
+```tsx
+<Modal>
+  <ModalTrigger asChild>
+    <Button variant="destructive">Delete Account</Button>
+  </ModalTrigger>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Confirm Deletion</ModalTitle>
+      <ModalDescription>
+        This action cannot be undone. Are you sure you want to delete your account?
+      </ModalDescription>
+    </ModalHeader>
+    <ModalFooter>
+      <ModalClose asChild>
+        <Button variant="ghost">Cancel</Button>
+      </ModalClose>
+      <Button variant="destructive">Delete Account</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+### Form Modal
+
+```tsx
+const [formData, setFormData] = useState({ name: '', email: '' })
+
+<Modal>
+  <ModalTrigger asChild>
+    <Button>Add User</Button>
+  </ModalTrigger>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Add New User</ModalTitle>
+      <ModalDescription>
+        Fill out the form below to add a new user to your team.
+      </ModalDescription>
+    </ModalHeader>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium mb-2">
+          Full Name
+        </label>
+        <Input
+          id="name"
+          value={formData.name}
+          onChange={(e) => setFormData({...formData, name: e.target.value})}
+          placeholder="Enter full name"
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium mb-2">
+          Email Address
+        </label>
+        <Input
+          id="email"
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({...formData, email: e.target.value})}
+          placeholder="Enter email address"
+          required
+        />
+      </div>
+      <ModalFooter>
+        <ModalClose asChild>
+          <Button variant="ghost" type="button">Cancel</Button>
+        </ModalClose>
+        <Button type="submit">Add User</Button>
+      </ModalFooter>
+    </form>
+  </ModalContent>
+</Modal>
+```
+
+### Image Gallery Modal
+
+```tsx
+<Modal>
+  <ModalTrigger asChild>
+    <img 
+      src="/thumbnail.jpg" 
+      alt="Gallery item" 
+      className="cursor-pointer rounded-lg"
+    />
+  </ModalTrigger>
+  <ModalContent size="xl">
+    <ModalHeader>
+      <ModalTitle>Mountain Landscape</ModalTitle>
+      <ModalDescription>
+        Captured at Yosemite National Park, 2024
+      </ModalDescription>
+    </ModalHeader>
+    <div className="flex justify-center">
+      <img 
+        src="/full-image.jpg" 
+        alt="Full size mountain landscape"
+        className="max-w-full h-auto rounded-lg"
+      />
+    </div>
+    <ModalFooter>
+      <Button variant="ghost">Download</Button>
+      <Button variant="ghost">Share</Button>
+      <ModalClose asChild>
+        <Button>Close</Button>
+      </ModalClose>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+### Loading Modal
+
+```tsx
+const [isLoading, setIsLoading] = useState(false)
+
+<Modal open={isLoading} onOpenChange={setIsLoading}>
+  <ModalContent size="sm">
+    <ModalHeader>
+      <ModalTitle>Processing</ModalTitle>
+      <ModalDescription>
+        Please wait while we process your request...
+      </ModalDescription>
+    </ModalHeader>
+    <div className="flex justify-center py-8">
+      <LoadingSpinner size="lg" />
+    </div>
+  </ModalContent>
+</Modal>
+```
+
+### Multi-step Modal
+
+```tsx
+const [step, setStep] = useState(1)
+const [isOpen, setIsOpen] = useState(false)
+
+<Modal open={isOpen} onOpenChange={setIsOpen}>
+  <ModalTrigger asChild>
+    <Button>Start Setup</Button>
+  </ModalTrigger>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Account Setup - Step {step} of 3</ModalTitle>
+      <ModalDescription>
+        {step === 1 && "Let's start with your basic information"}
+        {step === 2 && "Now, let's set up your preferences"}
+        {step === 3 && "Finally, review and confirm your settings"}
+      </ModalDescription>
+    </ModalHeader>
+    
+    <div className="py-6">
+      {step === 1 && <StepOneContent />}
+      {step === 2 && <StepTwoContent />}
+      {step === 3 && <StepThreeContent />}
+    </div>
+    
+    <ModalFooter>
+      {step > 1 && (
+        <Button variant="ghost" onClick={() => setStep(step - 1)}>
+          Previous
+        </Button>
+      )}
+      {step < 3 ? (
+        <Button onClick={() => setStep(step + 1)}>
+          Next
+        </Button>
+      ) : (
+        <Button onClick={() => setIsOpen(false)}>
+          Complete Setup
+        </Button>
+      )}
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+###
