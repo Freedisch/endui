@@ -1,0 +1,462 @@
+# Table
+
+Display data in rows and columns with proper semantic markup. Tables are essential for presenting structured data in a scannable, comparable format. When designed well, they help users quickly find, sort, and analyze information.
+
+## Features
+
+- **Semantic HTML**: Proper table structure for accessibility and SEO
+- **Visual Variants**: Striped rows, borders, and size options for different contexts
+- **Responsive Design**: Horizontal scrolling for tables that exceed container width
+- **Sortable Support**: Easy integration with sorting functionality
+- **Selection**: Built-in support for row selection patterns
+
+## When to Use
+
+- **Data Comparison**: When users need to compare values across multiple items
+- **Detailed Lists**: Product catalogs, user lists, financial records
+- **Reports**: Analytics, sales figures, performance metrics
+- **Administration**: Managing users, orders, inventory
+- **Documentation**: API references, configuration options
+
+## Accessibility Features
+
+- Semantic table elements (thead, tbody, tfoot)
+- Proper header associations for screen readers
+- Keyboard navigation for interactive elements
+- Clear visual hierarchy and spacing
+- ARIA labels for complex table interactions
+
+## Import
+
+```tsx
+import { 
+  Table, 
+  TableHeader, 
+  TableBody, 
+  TableFooter,
+  TableHead, 
+  TableRow, 
+  TableCell, 
+  TableCaption 
+} from 'endui'
+```
+
+## Usage
+
+### Basic Table
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>John Doe</TableCell>
+      <TableCell>john@example.com</TableCell>
+      <TableCell>Admin</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Jane Smith</TableCell>
+      <TableCell>jane@example.com</TableCell>
+      <TableCell>User</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+### Table Variants
+
+```tsx
+<Table variant="default">Default Table</Table>
+<Table variant="striped">Striped Table</Table>
+<Table variant="bordered">Bordered Table</Table>
+```
+
+### Table Sizes
+
+```tsx
+<Table size="sm">Small Table</Table>
+<Table size="default">Default Table</Table>
+<Table size="lg">Large Table</Table>
+```
+
+### Table with Caption
+
+```tsx
+<Table>
+  <TableCaption>A list of recent users and their information</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead>Last Login</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>John Doe</TableCell>
+      <TableCell>Active</TableCell>
+      <TableCell>2 hours ago</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+## API Reference
+
+### Table Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'striped' \| 'bordered'` | `'default'` | Table visual style |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Table size |
+| `className` | `string` | - | Additional CSS classes |
+
+### Sub-components
+
+All table sub-components accept their respective HTML attributes plus `className`:
+
+- **TableHeader**: `<thead>` element for table headers
+- **TableBody**: `<tbody>` element for table body
+- **TableFooter**: `<tfoot>` element for table footer
+- **TableRow**: `<tr>` element for table rows
+- **TableHead**: `<th>` element for header cells
+- **TableCell**: `<td>` element for data cells
+- **TableCaption**: `<caption>` element for table description
+
+## Examples
+
+### Interactive Table with Actions
+
+```tsx
+const users = [
+  { id: 1, name: "John Doe", email: "john@example.com", status: "Active", role: "Admin" },
+  { id: 2, name: "Jane Smith", email: "jane@example.com", status: "Inactive", role: "User" },
+  { id: 3, name: "Bob Johnson", email: "bob@example.com", status: "Active", role: "Editor" },
+]
+
+<Table variant="striped">
+  <TableCaption>Team members and their current status</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead>Role</TableHead>
+      <TableHead className="text-right">Actions</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {users.map((user) => (
+      <TableRow key={user.id}>
+        <TableCell className="font-medium">{user.name}</TableCell>
+        <TableCell>{user.email}</TableCell>
+        <TableCell>
+          <Badge variant={user.status === 'Active' ? 'success' : 'secondary'}>
+            {user.status}
+          </Badge>
+        </TableCell>
+        <TableCell>{user.role}</TableCell>
+        <TableCell className="text-right">
+          <div className="flex justify-end space-x-2">
+            <Button variant="ghost" size="sm">Edit</Button>
+            <Button variant="ghost" size="sm" className="text-red-600">
+              Delete
+            </Button>
+          </div>
+        </TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+```
+
+### Sortable Table
+
+```tsx
+const [sortField, setSortField] = useState<string | null>(null)
+const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+
+const handleSort = (field: string) => {
+  if (sortField === field) {
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+  } else {
+    setSortField(field)
+    setSortDirection('asc')
+  }
+}
+
+const sortedData = [...data].sort((a, b) => {
+  if (!sortField) return 0
+  const aVal = a[sortField]
+  const bVal = b[sortField]
+  const modifier = sortDirection === 'asc' ? 1 : -1
+  return aVal > bVal ? modifier : -modifier
+})
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>
+        <button 
+          onClick={() => handleSort('name')}
+          className="flex items-center space-x-1 hover:text-gray-900"
+        >
+          <span>Name</span>
+          <ChevronUpDown className="h-4 w-4" />
+        </button>
+      </TableHead>
+      <TableHead>
+        <button 
+          onClick={() => handleSort('date')}
+          className="flex items-center space-x-1 hover:text-gray-900"
+        >
+          <span>Date</span>
+          <ChevronUpDown className="h-4 w-4" />
+        </button>
+      </TableHead>
+      <TableHead>Amount</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {sortedData.map((item) => (
+      <TableRow key={item.id}>
+        <TableCell>{item.name}</TableCell>
+        <TableCell>{item.date}</TableCell>
+        <TableCell>{item.amount}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+```
+
+### Selectable Table
+
+```tsx
+const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set())
+
+const toggleRow = (id: number) => {
+  const newSelected = new Set(selectedRows)
+  if (newSelected.has(id)) {
+    newSelected.delete(id)
+  } else {
+    newSelected.add(id)
+  }
+  setSelectedRows(newSelected)
+}
+
+const toggleAll = () => {
+  if (selectedRows.size === data.length) {
+    setSelectedRows(new Set())
+  } else {
+    setSelectedRows(new Set(data.map(item => item.id)))
+  }
+}
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead className="w-12">
+        <input
+          type="checkbox"
+          checked={selectedRows.size === data.length}
+          onChange={toggleAll}
+          className="rounded"
+        />
+      </TableHead>
+      <TableHead>Product</TableHead>
+      <TableHead>Price</TableHead>
+      <TableHead>Stock</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {data.map((item) => (
+      <TableRow 
+        key={item.id}
+        className={selectedRows.has(item.id) ? 'bg-blue-50' : ''}
+      >
+        <TableCell>
+          <input
+            type="checkbox"
+            checked={selectedRows.has(item.id)}
+            onChange={() => toggleRow(item.id)}
+            className="rounded"
+          />
+        </TableCell>
+        <TableCell className="font-medium">{item.product}</TableCell>
+        <TableCell>${item.price}</TableCell>
+        <TableCell>{item.stock}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+```
+
+### Table with Footer Summary
+
+```tsx
+const data = [
+  { product: "Laptop", price: 999, quantity: 2 },
+  { product: "Mouse", price: 25, quantity: 5 },
+  { product: "Keyboard", price: 75, quantity: 3 },
+]
+
+const total = data.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Product</TableHead>
+      <TableHead>Price</TableHead>
+      <TableHead>Quantity</TableHead>
+      <TableHead className="text-right">Subtotal</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {data.map((item, index) => (
+      <TableRow key={index}>
+        <TableCell className="font-medium">{item.product}</TableCell>
+        <TableCell>${item.price}</TableCell>
+        <TableCell>{item.quantity}</TableCell>
+        <TableCell className="text-right">${item.price * item.quantity}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+  <TableFooter>
+    <TableRow>
+      <TableCell colSpan={3} className="font-medium">Total</TableCell>
+      <TableCell className="text-right font-medium">${total}</TableCell>
+    </TableRow>
+  </TableFooter>
+</Table>
+```
+
+### Responsive Table
+
+```tsx
+<div className="overflow-x-auto">
+  <Table className="min-w-full">
+    <TableHeader>
+      <TableRow>
+        <TableHead className="min-w-[150px]">Customer</TableHead>
+        <TableHead className="min-w-[100px]">Order ID</TableHead>
+        <TableHead className="min-w-[120px]">Date</TableHead>
+        <TableHead className="min-w-[100px]">Status</TableHead>
+        <TableHead className="min-w-[100px] text-right">Amount</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {orders.map((order) => (
+        <TableRow key={order.id}>
+          <TableCell className="font-medium">{order.customer}</TableCell>
+          <TableCell>{order.id}</TableCell>
+          <TableCell>{order.date}</TableCell>
+          <TableCell>
+            <Badge variant={order.status === 'completed' ? 'success' : 'warning'}>
+              {order.status}
+            </Badge>
+          </TableCell>
+          <TableCell className="text-right">{order.amount}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</div>
+```
+
+### Empty State Table
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {data.length === 0 ? (
+      <TableRow>
+        <TableCell colSpan={3} className="text-center py-8">
+          <div className="flex flex-col items-center space-y-2">
+            <Users className="h-8 w-8 text-gray-400" />
+            <p className="text-gray-500">No users found</p>
+            <Button size="sm">Add User</Button>
+          </div>
+        </TableCell>
+      </TableRow>
+    ) : (
+      data.map((user) => (
+        <TableRow key={user.id}>
+          <TableCell>{user.name}</TableCell>
+          <TableCell>{user.email}</TableCell>
+          <TableCell>{user.role}</TableCell>
+        </TableRow>
+      ))
+    )}
+  </TableBody>
+</Table>
+```
+
+### Loading State Table
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Status</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {isLoading ? (
+      Array(5).fill(0).map((_, index) => (
+        <TableRow key={index}>
+          <TableCell>
+            <div className="h-4 bg-gray-200 rounded animate-pulse" />
+          </TableCell>
+          <TableCell>
+            <div className="h-4 bg-gray-200 rounded animate-pulse" />
+          </TableCell>
+          <TableCell>
+            <div className="h-4 bg-gray-200 rounded animate-pulse w-16" />
+          </TableCell>
+        </TableRow>
+      ))
+    ) : (
+      data.map((item) => (
+        <TableRow key={item.id}>
+          <TableCell>{item.name}</TableCell>
+          <TableCell>{item.email}</TableCell>
+          <TableCell>{item.status}</TableCell>
+        </TableRow>
+      ))
+    )}
+  </TableBody>
+</Table>
+```
+
+## Accessibility
+
+- Uses proper semantic HTML table elements
+- Supports screen readers with appropriate ARIA attributes
+- Headers are associated with their data cells
+- Sortable columns include proper ARIA labels
+- Keyboard navigation support for interactive elements
+
+## Best Practices
+
+1. **Use semantic markup** - Always use proper table elements for accessibility
+2. **Include table captions** - Help screen readers understand table content
+3. **Keep headers concise** - Use clear, short column headers
+4. **Handle overflow** - Use responsive design for large tables
+5. **Show loading states** - Provide feedback during data loading
+6. **Implement empty states** - Show helpful messages when no data is available
+7. **Consider pagination** - Break up large datasets for better performance

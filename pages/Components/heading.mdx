@@ -1,0 +1,197 @@
+# Heading
+
+Semantic heading component with size variants and styling options. Headings establish information hierarchy and help users scan content effectively. They're crucial for accessibility, SEO, and creating logical document structure.
+
+## Features
+
+- **Semantic HTML**: Proper heading levels (h1-h6) for document structure
+- **Visual Flexibility**: Size variants independent of semantic level
+- **Color Options**: Multiple color schemes for different contexts
+- **Typography**: Consistent font weights, spacing, and tracking
+- **Accessibility**: Screen reader navigation and document outline support
+
+## SEO and Accessibility
+
+- Use heading levels sequentially (don't skip from h1 to h3)
+- Each page should have exactly one h1 element
+- Headings should form a logical outline of your content
+- Visual size doesn't have to match semantic level
+- Provide meaningful, descriptive heading text
+
+## Content Hierarchy
+
+- **H1**: Page title or main content heading
+- **H2**: Major section headings
+- **H3**: Subsection headings within H2 sections
+- **H4-H6**: Further subdivision as needed
+- Use size variants to create visual hierarchy while maintaining semantic structure
+
+## Import
+
+```tsx
+import { Heading } from 'endui'
+```
+
+## Usage
+
+### Basic Heading
+
+```tsx
+<Heading>Default Heading</Heading>
+```
+
+### Heading Levels
+
+```tsx
+<Heading as="h1">Page Title</Heading>
+<Heading as="h2">Section Title</Heading>
+<Heading as="h3">Subsection</Heading>
+<Heading as="h4">Sub-subsection</Heading>
+<Heading as="h5">Minor Heading</Heading>
+<Heading as="h6">Smallest Heading</Heading>
+```
+
+### Heading Sizes
+
+```tsx
+<Heading size="sm">Small Heading</Heading>
+<Heading size="md">Medium Heading</Heading>
+<Heading size="lg">Large Heading</Heading>
+<Heading size="xl">Extra Large</Heading>
+<Heading size="2xl">2X Large</Heading>
+```
+
+### Heading Colors
+
+```tsx
+<Heading color="default">Default Color</Heading>
+<Heading color="muted">Muted Color</Heading>
+<Heading color="primary">Primary Color</Heading>
+```
+
+### Combining Props
+
+```tsx
+<Heading as="h1" size="2xl" color="primary">
+  Welcome to Our Platform
+</Heading>
+```
+
+## API Reference
+
+### Heading Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `as` | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'h6'` | `'h2'` | HTML heading level |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | `'md'` | Visual size |
+| `color` | `'default' \| 'muted' \| 'primary'` | `'default'` | Text color |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Heading content |
+
+All standard HTML heading attributes are also supported.
+
+## Examples
+
+### Page Header
+
+```tsx
+<div className="space-y-2 mb-8">
+  <Heading as="h1" size="2xl">
+    Dashboard
+  </Heading>
+  <Heading as="h2" size="md" color="muted">
+    Welcome back, John! Here's what's happening today.
+  </Heading>
+</div>
+```
+
+### Section Headers
+
+```tsx
+<div className="space-y-8">
+  <section>
+    <Heading as="h2" size="xl" className="mb-4">
+      Recent Activity
+    </Heading>
+    <div className="space-y-4">
+      {/* Activity items */}
+    </div>
+  </section>
+  
+  <section>
+    <Heading as="h2" size="xl" className="mb-4">
+      Quick Actions
+    </Heading>
+    <div className="grid grid-cols-2 gap-4">
+      {/* Action cards */}
+    </div>
+  </section>
+</div>
+```
+
+### Card Headers
+
+```tsx
+<Card>
+  <CardHeader>
+    <Heading as="h3" size="lg">
+      User Statistics
+    </Heading>
+    <Heading as="h4" size="sm" color="muted">
+      Overview of user engagement metrics
+    </Heading>
+  </CardHeader>
+  <CardContent>
+    {/* Chart or statistics content */}
+  </CardContent>
+</Card>
+```
+
+### Article Structure
+
+```tsx
+<article className="max-w-3xl mx-auto space-y-6">
+  <header className="space-y-4">
+    <Heading as="h1" size="2xl">
+      Getting Started with React Hooks
+    </Heading>
+    <Heading as="h2" size="md" color="muted">
+      A comprehensive guide to understanding and using React Hooks in your applications
+    </Heading>
+    <div className="flex items-center space-x-4 text-sm text-gray-600">
+      <span>By John Doe</span>
+      <span>•</span>
+      <span>March 15, 2024</span>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+  </header>
+  
+  <div className="prose max-w-none">
+    <Heading as="h2" size="lg" className="mt-8 mb-4">
+      Introduction
+    </Heading>
+    <p>React Hooks revolutionized how we write React components...</p>
+    
+    <Heading as="h3" size="md" className="mt-6 mb-3">
+      What are Hooks?
+    </Heading>
+    <p>Hooks are functions that let you...</p>
+    
+    <Heading as="h3" size="md" className="mt-6 mb-3">
+      Basic Hook Examples
+    </Heading>
+    <p>Let's start with the most common hooks...</p>
+  </div>
+</article>
+```
+
+### Navigation Breadcrumbs with Headings
+
+```tsx
+<div className="space-y-4">
+  <nav className="flex items-center space-x-2 text-sm">
+    <a href="/" className="text-gray-600 hover:text-gray-900">Home</a>
+    <ChevronRight className="h-4 w-4 text-gray-400" />
+    <a href="/products" className="text-gray-600 hover:text-gray-900">Products</a>

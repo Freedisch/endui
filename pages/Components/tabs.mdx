@@ -1,0 +1,380 @@
+# Tabs
+
+Organize content into multiple panels with tab navigation. Tabs are excellent for reducing cognitive load by organizing related content into digestible sections. They allow users to focus on one set of information at a time while maintaining easy access to other sections.
+
+## Features
+
+- **Keyboard Navigation**: Full arrow key navigation between tabs
+- **Flexible Orientation**: Horizontal and vertical tab layouts
+- **Controlled & Uncontrolled**: Support for both controlled and uncontrolled usage patterns
+- **Accessibility**: ARIA attributes, focus management, and screen reader support
+- **Customizable**: Easy styling and content customization
+
+## When to Use
+
+- **Settings Pages**: Organize configuration options into logical groups
+- **Dashboards**: Separate different types of data or views
+- **Product Information**: Technical specs, reviews, related items
+- **Content Categories**: Blog posts, documentation sections, feature lists
+- **Data Views**: Different representations of the same dataset
+
+## Design Considerations
+
+- Keep tab labels concise and descriptive
+- Maintain logical grouping of related content
+- Consider loading states for content-heavy tabs
+- Ensure mobile responsiveness for tab navigation
+- Limit the number of tabs to avoid overwhelming users
+
+## Import
+
+```tsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from 'endui'
+```
+
+## Usage
+
+### Basic Tabs
+
+```tsx
+<Tabs defaultValue="tab1">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    Content for Tab 1
+  </TabsContent>
+  <TabsContent value="tab2">
+    Content for Tab 2
+  </TabsContent>
+</Tabs>
+```
+
+### Controlled Tabs
+
+```tsx
+const [activeTab, setActiveTab] = useState('overview')
+
+<Tabs value={activeTab} onValueChange={setActiveTab}>
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="details">Details</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    Overview content
+  </TabsContent>
+  <TabsContent value="details">
+    Details content
+  </TabsContent>
+</Tabs>
+```
+
+### Disabled Tabs
+
+```tsx
+<Tabs defaultValue="tab1">
+  <TabsList>
+    <TabsTrigger value="tab1">Available</TabsTrigger>
+    <TabsTrigger value="tab2" disabled>Coming Soon</TabsTrigger>
+    <TabsTrigger value="tab3">Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    This tab is available
+  </TabsContent>
+  <TabsContent value="tab3">
+    Settings content
+  </TabsContent>
+</Tabs>
+```
+
+## API Reference
+
+### Tabs Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `defaultValue` | `string` | - | Default active tab |
+| `value` | `string` | - | Controlled active tab |
+| `onValueChange` | `(value: string) => void` | - | Tab change callback |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Tab orientation |
+| `dir` | `'ltr' \| 'rtl'` | `'ltr'` | Text direction |
+| `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | How tabs are activated |
+| `className` | `string` | - | Additional CSS classes |
+
+### TabsTrigger Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Tab identifier (required) |
+| `disabled` | `boolean` | `false` | Disable the tab |
+| `className` | `string` | - | Additional CSS classes |
+
+All Radix UI Tabs props are supported.
+
+## Examples
+
+### Tabs with Cards
+
+```tsx
+<Tabs defaultValue="profile" className="w-full max-w-md">
+  <TabsList>
+    <TabsTrigger value="profile">Profile</TabsTrigger>
+    <TabsTrigger value="settings">Settings</TabsTrigger>
+    <TabsTrigger value="notifications">Notifications</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="profile">
+    <Card>
+      <CardHeader>
+        <CardTitle>Profile</CardTitle>
+        <CardDescription>Manage your profile information</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">Full Name</label>
+          <Input placeholder="Your name" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Email</label>
+          <Input type="email" placeholder="your@email.com" />
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button>Save Changes</Button>
+      </CardFooter>
+    </Card>
+  </TabsContent>
+  
+  <TabsContent value="settings">
+    <Card>
+      <CardHeader>
+        <CardTitle>Settings</CardTitle>
+        <CardDescription>Configure your preferences</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between">
+          <span>Email notifications</span>
+          <input type="checkbox" />
+        </div>
+        <div className="flex items-center justify-between">
+          <span>Dark mode</span>
+          <input type="checkbox" />
+        </div>
+      </CardContent>
+    </Card>
+  </TabsContent>
+  
+  <TabsContent value="notifications">
+    <Card>
+      <CardHeader>
+        <CardTitle>Notifications</CardTitle>
+        <CardDescription>Manage your notification preferences</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-gray-600">No notifications to show.</p>
+      </CardContent>
+    </Card>
+  </TabsContent>
+</Tabs>
+```
+
+### Dashboard Tabs
+
+```tsx
+<Tabs defaultValue="analytics" className="w-full">
+  <TabsList className="grid w-full grid-cols-4">
+    <TabsTrigger value="analytics">Analytics</TabsTrigger>
+    <TabsTrigger value="reports">Reports</TabsTrigger>
+    <TabsTrigger value="users">Users</TabsTrigger>
+    <TabsTrigger value="settings">Settings</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="analytics" className="mt-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Users</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">12,543</div>
+          <p className="text-sm text-green-600">+12% from last month</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Revenue</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">$45,231</div>
+          <p className="text-sm text-green-600">+8% from last month</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Conversion Rate</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">3.2%</div>
+          <p className="text-sm text-red-600">-2% from last month</p>
+        </CardContent>
+      </Card>
+    </div>
+  </TabsContent>
+  
+  <TabsContent value="reports">
+    <Card>
+      <CardHeader>
+        <CardTitle>Monthly Reports</CardTitle>
+        <CardDescription>Download and view your monthly reports</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center p-3 border rounded">
+            <span>November 2024</span>
+            <Button size="sm">Download</Button>
+          </div>
+          <div className="flex justify-between items-center p-3 border rounded">
+            <span>October 2024</span>
+            <Button size="sm">Download</Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  </TabsContent>
+</Tabs>
+```
+
+### Vertical Tabs
+
+```tsx
+<Tabs defaultValue="general" orientation="vertical" className="flex space-x-8">
+  <TabsList className="flex-col h-fit">
+    <TabsTrigger value="general" className="w-full justify-start">
+      General
+    </TabsTrigger>
+    <TabsTrigger value="security" className="w-full justify-start">
+      Security
+    </TabsTrigger>
+    <TabsTrigger value="integrations" className="w-full justify-start">
+      Integrations
+    </TabsTrigger>
+    <TabsTrigger value="billing" className="w-full justify-start">
+      Billing
+    </TabsTrigger>
+  </TabsList>
+  
+  <div className="flex-1">
+    <TabsContent value="general">
+      <Card>
+        <CardHeader>
+          <CardTitle>General Settings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>General configuration options...</p>
+        </CardContent>
+      </Card>
+    </TabsContent>
+    
+    <TabsContent value="security">
+      <Card>
+        <CardHeader>
+          <CardTitle>Security Settings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Security and privacy options...</p>
+        </CardContent>
+      </Card>
+    </TabsContent>
+  </div>
+</Tabs>
+```
+
+### Tabs with Icons
+
+```tsx
+import { BarChart3, Users, Settings, Bell } from 'lucide-react'
+
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview" className="flex items-center space-x-2">
+      <BarChart3 className="h-4 w-4" />
+      <span>Overview</span>
+    </TabsTrigger>
+    <TabsTrigger value="users" className="flex items-center space-x-2">
+      <Users className="h-4 w-4" />
+      <span>Users</span>
+    </TabsTrigger>
+    <TabsTrigger value="notifications" className="flex items-center space-x-2">
+      <Bell className="h-4 w-4" />
+      <span>Notifications</span>
+    </TabsTrigger>
+    <TabsTrigger value="settings" className="flex items-center space-x-2">
+      <Settings className="h-4 w-4" />
+      <span>Settings</span>
+    </TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="overview">
+    Overview dashboard content
+  </TabsContent>
+  <TabsContent value="users">
+    User management content
+  </TabsContent>
+</Tabs>
+```
+
+### Lazy Loading Tabs
+
+```tsx
+const [loadedTabs, setLoadedTabs] = useState(new Set(['tab1']))
+
+const handleTabChange = (value: string) => {
+  setLoadedTabs(prev => new Set([...prev, value]))
+}
+
+<Tabs defaultValue="tab1" onValueChange={handleTabChange}>
+  <TabsList>
+    <TabsTrigger value="tab1">Loaded</TabsTrigger>
+    <TabsTrigger value="tab2">Heavy Content</TabsTrigger>
+    <TabsTrigger value="tab3">API Data</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="tab1">
+    Always loaded content
+  </TabsContent>
+  
+  <TabsContent value="tab2">
+    {loadedTabs.has('tab2') ? (
+      <HeavyComponent />
+    ) : (
+      <div>Loading...</div>
+    )}
+  </TabsContent>
+  
+  <TabsContent value="tab3">
+    {loadedTabs.has('tab3') ? (
+      <DataTable />
+    ) : (
+      <LoadingSpinner />
+    )}
+  </TabsContent>
+</Tabs>
+```
+
+## Accessibility
+
+- Keyboard navigation with arrow keys
+- Focus management between tab triggers and content
+- Proper ARIA attributes for screen readers
+- Support for both automatic and manual activation modes
+- RTL (right-to-left) text direction support
+
+## Best Practices
+
+1. **Use descriptive tab labels** - Make it clear what content each tab contains
+2. **Keep tab content focused** - Each tab should contain related content
+3. **Consider loading states** - For tabs with heavy content or API calls
+4. **Limit the number of tabs** - Too many tabs can be overwhelming
+5. **Use icons sparingly** - Icons should enhance, not replace, clear labels
+6. **Handle empty states** - Show appropriate messages when tabs have no content

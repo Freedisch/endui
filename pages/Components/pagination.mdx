@@ -1,0 +1,408 @@
+# Pagination
+
+Navigate through pages of content with customizable pagination controls.
+
+## Import
+
+```tsx
+import { Pagination } from 'endui'
+```
+
+## Usage
+
+### Basic Pagination
+
+```tsx
+const [currentPage, setCurrentPage] = useState(1)
+
+<Pagination
+  currentPage={currentPage}
+  totalPages={10}
+  onPageChange={setCurrentPage}
+/>
+```
+
+### Customized Pagination
+
+```tsx
+<Pagination
+  currentPage={currentPage}
+  totalPages={20}
+  onPageChange={setCurrentPage}
+  siblingCount={2}
+  showFirstLast={true}
+  showPrevNext={true}
+/>
+```
+
+### Minimal Pagination
+
+```tsx
+<Pagination
+  currentPage={currentPage}
+  totalPages={5}
+  onPageChange={setCurrentPage}
+  showFirstLast={false}
+  siblingCount={0}
+/>
+```
+
+## API Reference
+
+### Pagination Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `currentPage` | `number` | - | Current active page (required) |
+| `totalPages` | `number` | - | Total number of pages (required) |
+| `onPageChange` | `(page: number) => void` | - | Page change callback (required) |
+| `siblingCount` | `number` | `1` | Pages shown around current page |
+| `showFirstLast` | `boolean` | `true` | Show first/last page buttons |
+| `showPrevNext` | `boolean` | `true` | Show previous/next buttons |
+| `className` | `string` | - | Additional CSS classes |
+
+## Examples
+
+### Pagination with Data Display
+
+```tsx
+const [currentPage, setCurrentPage] = useState(1)
+const itemsPerPage = 10
+const totalItems = 95
+const totalPages = Math.ceil(totalItems / itemsPerPage)
+
+const startItem = (currentPage - 1) * itemsPerPage + 1
+const endItem = Math.min(currentPage * itemsPerPage, totalItems)
+
+<div className="space-y-4">
+  <div className="flex justify-between items-center text-sm text-gray-600">
+    <span>
+      Showing {startItem}-{endItem} of {totalItems} results
+    </span>
+    <span>
+      Page {currentPage} of {totalPages}
+    </span>
+  </div>
+  
+  <Pagination
+    currentPage={currentPage}
+    totalPages={totalPages}
+    onPageChange={setCurrentPage}
+  />
+</div>
+```
+
+### Table with Pagination
+
+```tsx
+const [currentPage, setCurrentPage] = useState(1)
+const [itemsPerPage, setItemsPerPage] = useState(10)
+
+const startIndex = (currentPage - 1) * itemsPerPage
+const endIndex = startIndex + itemsPerPage
+const currentData = allData.slice(startIndex, endIndex)
+const totalPages = Math.ceil(allData.length / itemsPerPage)
+
+<div className="space-y-4">
+  <div className="flex justify-between items-center">
+    <div className="flex items-center space-x-2">
+      <span className="text-sm">Show</span>
+      <select 
+        value={itemsPerPage} 
+        onChange={(e) => {
+          setItemsPerPage(Number(e.target.value))
+          setCurrentPage(1)
+        }}
+        className="border rounded px-2 py-1"
+      >
+        <option value={5}>5</option>
+        <option value={10}>10</option>
+        <option value={25}>25</option>
+        <option value={50}>50</option>
+      </select>
+      <span className="text-sm">entries</span>
+    </div>
+  </div>
+
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Name</TableHead>
+        <TableHead>Email</TableHead>
+        <TableHead>Role</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {currentData.map((user) => (
+        <TableRow key={user.id}>
+          <TableCell>{user.name}</TableCell>
+          <TableCell>{user.email}</TableCell>
+          <TableCell>{user.role}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+
+  <div className="flex justify-between items-center">
+    <span className="text-sm text-gray-600">
+      Showing {startIndex + 1} to {Math.min(endIndex, allData.length)} of {allData.length} entries
+    </span>
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={setCurrentPage}
+    />
+  </div>
+</div>
+```
+
+### Search Results with Pagination
+
+```tsx
+const [searchQuery, setSearchQuery] = useState('')
+const [currentPage, setCurrentPage] = useState(1)
+const resultsPerPage = 20
+
+const filteredResults = allResults.filter(result =>
+  result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  result.description.toLowerCase().includes(searchQuery.toLowerCase())
+)
+
+const totalPages = Math.ceil(filteredResults.length / resultsPerPage)
+const currentResults = filteredResults.slice(
+  (currentPage - 1) * resultsPerPage,
+  currentPage * resultsPerPage
+)
+
+// Reset to page 1 when search changes
+useEffect(() => {
+  setCurrentPage(1)
+}, [searchQuery])
+
+<div className="space-y-6">
+  <div className="flex items-center space-x-4">
+    <Input
+      type="search"
+      placeholder="Search results..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="max-w-md"
+    />
+    <span className="text-sm text-gray-600">
+      {filteredResults.length} result{filteredResults.length !== 1 ? 's' : ''}
+    </span>
+  </div>
+
+  <div className="space-y-4">
+    {currentResults.map((result) => (
+      <Card key={result.id}>
+        <CardHeader>
+          <CardTitle className="text-lg">{result.title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-gray-600">{result.description}</p>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+
+  {totalPages > 1 && (
+    <div className="flex justify-center">
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        siblingCount={2}
+      />
+    </div>
+  )}
+</div>
+```
+
+### API Data Pagination
+
+```tsx
+const [currentPage, setCurrentPage] = useState(1)
+const [loading, setLoading] = useState(false)
+const [data, setData] = useState([])
+const [totalPages, setTotalPages] = useState(0)
+
+const fetchData = async (page: number) => {
+  setLoading(true)
+  try {
+    const response = await fetch(`/api/users?page=${page}&limit=10`)
+    const result = await response.json()
+    setData(result.data)
+    setTotalPages(result.totalPages)
+  } catch (error) {
+    console.error('Failed to fetch data:', error)
+  } finally {
+    setLoading(false)
+  }
+}
+
+useEffect(() => {
+  fetchData(currentPage)
+}, [currentPage])
+
+<div className="space-y-4">
+  {loading ? (
+    <div className="flex justify-center py-8">
+      <LoadingSpinner size="lg" />
+    </div>
+  ) : (
+    <div className="grid gap-4">
+      {data.map((item) => (
+        <Card key={item.id}>
+          <CardContent>
+            <h3 className="font-medium">{item.name}</h3>
+            <p className="text-gray-600">{item.email}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )}
+
+  <Pagination
+    currentPage={currentPage}
+    totalPages={totalPages}
+    onPageChange={setCurrentPage}
+  />
+</div>
+```
+
+### Infinite Scroll Alternative
+
+```tsx
+const [currentPage, setCurrentPage] = useState(1)
+const [allData, setAllData] = useState([])
+const [hasMore, setHasMore] = useState(true)
+
+const loadMore = async () => {
+  const newData = await fetchPage(currentPage + 1)
+  if (newData.length === 0) {
+    setHasMore(false)
+  } else {
+    setAllData(prev => [...prev, ...newData])
+    setCurrentPage(prev => prev + 1)
+  }
+}
+
+<div className="space-y-4">
+  {allData.map((item) => (
+    <Card key={item.id}>
+      <CardContent>
+        <p>{item.content}</p>
+      </CardContent>
+    </Card>
+  ))}
+
+  <div className="flex justify-center">
+    {hasMore ? (
+      <Button onClick={loadMore} variant="outline">
+        Load More
+      </Button>
+    ) : (
+      <p className="text-gray-500">No more items to load</p>
+    )}
+  </div>
+</div>
+```
+
+### Mobile-Friendly Pagination
+
+```tsx
+<div className="flex flex-col sm:flex-row sm:justify-between items-center space-y-4 sm:space-y-0">
+  <div className="text-sm text-gray-600">
+    Page {currentPage} of {totalPages}
+  </div>
+  
+  {/* Mobile: Show only prev/next */}
+  <div className="block sm:hidden">
+    <div className="flex space-x-2">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setCurrentPage(currentPage - 1)}
+        disabled={currentPage <= 1}
+      >
+        Previous
+      </Button>
+      <Button
+        variant="outline" 
+        size="sm"
+        onClick={() => setCurrentPage(currentPage + 1)}
+        disabled={currentPage >= totalPages}
+      >
+        Next
+      </Button>
+    </div>
+  </div>
+  
+  {/* Desktop: Show full pagination */}
+  <div className="hidden sm:block">
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={setCurrentPage}
+    />
+  </div>
+</div>
+```
+
+### Jump to Page
+
+```tsx
+const [jumpPage, setJumpPage] = useState('')
+
+const handleJumpToPage = () => {
+  const page = parseInt(jumpPage)
+  if (page >= 1 && page <= totalPages) {
+    setCurrentPage(page)
+    setJumpPage('')
+  }
+}
+
+<div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+  <Pagination
+    currentPage={currentPage}
+    totalPages={totalPages}
+    onPageChange={setCurrentPage}
+  />
+  
+  <div className="flex items-center space-x-2">
+    <span className="text-sm">Go to page:</span>
+    <Input
+      type="number"
+      min="1"
+      max={totalPages}
+      value={jumpPage}
+      onChange={(e) => setJumpPage(e.target.value)}
+      onKeyDown={(e) => e.key === 'Enter' && handleJumpToPage()}
+      className="w-20"
+      size="sm"
+    />
+    <Button size="sm" onClick={handleJumpToPage}>
+      Go
+    </Button>
+  </div>
+</div>
+```
+
+## Accessibility
+
+- Keyboard navigation support with arrow keys
+- Proper ARIA labels for screen readers
+- Focus management between page buttons
+- Disabled state handling for prev/next buttons
+- Clear indication of current page
+
+## Best Practices
+
+1. **Show total count** - Help users understand the dataset size
+2. **Preserve page state** - Consider URL parameters for shareable links
+3. **Handle edge cases** - Empty states, single page, loading states
+4. **Responsive design** - Adapt pagination for mobile devices
+5. **Performance** - Use server-side pagination for large datasets
+6. **User feedback** - Show loading states during page transitions
+7. **Reasonable limits** - Don't show too many page numbers at once

@@ -1,0 +1,460 @@
+# Sidebar
+
+Collapsible navigation sidebar with context API for state management. Sidebars provide persistent navigation while preserving screen real estate. They're essential for applications with complex navigation hierarchies or frequently accessed features.
+
+## Features
+
+- **Collapsible Design**: Save space with smooth expand/collapse animations
+- **Context API**: Shared state management across sidebar components
+- **Responsive**: Mobile-friendly with overlay and slide-out behavior
+- **Nested Navigation**: Support for multi-level menu structures
+- **Icon Integration**: Clean icon and text combinations
+
+## When to Use
+
+- **Admin Dashboards**: Complex applications with multiple sections
+- **Content Management**: Blogs, documentation sites, knowledge bases
+- **E-commerce**: Product categories, filters, account management
+- **SaaS Applications**: Feature navigation, user management, settings
+- **Documentation**: Section navigation, table of contents
+
+## Design Patterns
+
+- **Primary Navigation**: Main app sections and features
+- **Secondary Actions**: User profile, settings, help
+- **Contextual Menus**: Page-specific actions and filters
+- **Breadcrumb Integration**: Show current location within hierarchy
+- **Search Integration**: Quick access to content and features
+
+## Import
+
+```tsx
+import { 
+  Sidebar, 
+  SidebarHeader, 
+  SidebarContent, 
+  SidebarFooter,
+  SidebarTrigger, 
+  SidebarItem, 
+  useSidebar 
+} from 'endui'
+```
+
+## Usage
+
+### Basic Sidebar
+
+```tsx
+import { Home, Settings, User, Mail } from 'lucide-react'
+
+<Sidebar>
+  <SidebarHeader>
+    <h2 className="text-lg font-semibold">My App</h2>
+    <SidebarTrigger />
+  </SidebarHeader>
+  
+  <SidebarContent>
+    <SidebarItem icon={<Home className="h-4 w-4" />} active>
+      Dashboard
+    </SidebarItem>
+    <SidebarItem icon={<User className="h-4 w-4" />}>
+      Users
+    </SidebarItem>
+    <SidebarItem icon={<Mail className="h-4 w-4" />}>
+      Messages
+    </SidebarItem>
+    <SidebarItem icon={<Settings className="h-4 w-4" />}>
+      Settings
+    </SidebarItem>
+  </SidebarContent>
+  
+  <SidebarFooter>
+    <Button variant="ghost" className="w-full">
+      Sign Out
+    </Button>
+  </SidebarFooter>
+</Sidebar>
+```
+
+### Collapsible Sidebar
+
+```tsx
+<Sidebar collapsible defaultCollapsed={false}>
+  <SidebarHeader>
+    <div className="flex items-center space-x-2">
+      <div className="h-8 w-8 rounded bg-primary" />
+      <span className="font-semibold">Brand</span>
+    </div>
+    <SidebarTrigger />
+  </SidebarHeader>
+  
+  <SidebarContent>
+    <nav className="space-y-1">
+      <SidebarItem icon={<Home />} active>
+        Dashboard
+      </SidebarItem>
+      <SidebarItem icon={<Users />}>
+        Team
+      </SidebarItem>
+      <SidebarItem icon={<Settings />}>
+        Settings
+      </SidebarItem>
+    </nav>
+  </SidebarContent>
+</Sidebar>
+```
+
+### Using the Sidebar Hook
+
+```tsx
+function CustomSidebarComponent() {
+  const { collapsed, toggle, setCollapsed } = useSidebar()
+  
+  return (
+    <div className="p-4">
+      <p>Sidebar is {collapsed ? 'collapsed' : 'expanded'}</p>
+      <div className="space-x-2">
+        <Button onClick={toggle}>Toggle</Button>
+        <Button onClick={() => setCollapsed(true)}>Collapse</Button>
+        <Button onClick={() => setCollapsed(false)}>Expand</Button>
+      </div>
+    </div>
+  )
+}
+
+// Use within Sidebar context
+<Sidebar collapsible>
+  <SidebarContent>
+    <CustomSidebarComponent />
+  </SidebarContent>
+</Sidebar>
+```
+
+## API Reference
+
+### Sidebar Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'ghost'` | `'default'` | Sidebar visual style |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Sidebar width when expanded |
+| `collapsible` | `boolean` | `false` | Enable collapse functionality |
+| `defaultCollapsed` | `boolean` | `false` | Default collapsed state |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Sidebar content |
+
+### SidebarItem Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `ReactNode` | - | Icon element to display |
+| `active` | `boolean` | `false` | Active state styling |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Item label/content |
+
+### useSidebar Hook
+
+Returns an object with:
+- `collapsed`: Current collapsed state (boolean)
+- `setCollapsed`: Function to set collapsed state
+- `toggle`: Function to toggle collapsed state
+
+## Examples
+
+### Complete Application Layout
+
+```tsx
+function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar collapsible defaultCollapsed={false}>
+        <SidebarHeader>
+          <div className="flex items-center space-x-2">
+            <div className="h-8 w-8 rounded bg-blue-600 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">A</span>
+            </div>
+            <span className="font-semibold">Acme Corp</span>
+          </div>
+          <SidebarTrigger />
+        </SidebarHeader>
+        
+        <SidebarContent>
+          <nav className="space-y-1">
+            <SidebarItem icon={<LayoutDashboard />} active>
+              Dashboard
+            </SidebarItem>
+            <SidebarItem icon={<Users />}>
+              Customers
+            </SidebarItem>
+            <SidebarItem icon={<ShoppingCart />}>
+              Orders
+            </SidebarItem>
+            <SidebarItem icon={<Package />}>
+              Products
+            </SidebarItem>
+            <SidebarItem icon={<BarChart3 />}>
+              Analytics
+            </SidebarItem>
+            
+            <div className="pt-4">
+              <p className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                Account
+              </p>
+              <div className="mt-2 space-y-1">
+                <SidebarItem icon={<User />}>
+                  Profile
+                </SidebarItem>
+                <SidebarItem icon={<Settings />}>
+                  Settings
+                </SidebarItem>
+              </div>
+            </div>
+          </nav>
+        </SidebarContent>
+        
+        <SidebarFooter>
+          <div className="p-4 border-t">
+            <div className="flex items-center space-x-3">
+              <div className="h-8 w-8 rounded-full bg-gray-300" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium">John Doe</p>
+                <p className="text-xs text-gray-500 truncate">john@acme.com</p>
+              </div>
+            </div>
+            <Button variant="ghost" size="sm" className="w-full mt-2">
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
+        </SidebarFooter>
+      </Sidebar>
+      
+      <main className="flex-1 overflow-auto">
+        <div className="container mx-auto p-6">
+          {children}
+        </div>
+      </main>
+    </div>
+  )
+}
+```
+
+### Nested Navigation
+
+```tsx
+const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set())
+
+const toggleSection = (sectionId: string) => {
+  const newExpanded = new Set(expandedSections)
+  if (newExpanded.has(sectionId)) {
+    newExpanded.delete(sectionId)
+  } else {
+    newExpanded.add(sectionId)
+  }
+  setExpandedSections(newExpanded)
+}
+
+<Sidebar>
+  <SidebarHeader>
+    <h2 className="text-lg font-semibold">Admin Panel</h2>
+    <SidebarTrigger />
+  </SidebarHeader>
+  
+  <SidebarContent>
+    <nav className="space-y-1">
+      <SidebarItem icon={<Home />} active>
+        Dashboard
+      </SidebarItem>
+      
+      {/* User Management Section */}
+      <div>
+        <button
+          onClick={() => toggleSection('users')}
+          className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+        >
+          <div className="flex items-center space-x-3">
+            <Users className="h-4 w-4" />
+            <span>User Management</span>
+          </div>
+          <ChevronRight 
+            className={`h-4 w-4 transition-transform ${
+              expandedSections.has('users') ? 'rotate-90' : ''
+            }`} 
+          />
+        </button>
+        
+        {expandedSections.has('users') && (
+          <div className="ml-6 mt-1 space-y-1">
+            <SidebarItem>All Users</SidebarItem>
+            <SidebarItem>Roles & Permissions</SidebarItem>
+            <SidebarItem>Invitations</SidebarItem>
+          </div>
+        )}
+      </div>
+      
+      {/* Content Section */}
+      <div>
+        <button
+          onClick={() => toggleSection('content')}
+          className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+        >
+          <div className="flex items-center space-x-3">
+            <FileText className="h-4 w-4" />
+            <span>Content</span>
+          </div>
+          <ChevronRight 
+            className={`h-4 w-4 transition-transform ${
+              expandedSections.has('content') ? 'rotate-90' : ''
+            }`} 
+          />
+        </button>
+        
+        {expandedSections.has('content') && (
+          <div className="ml-6 mt-1 space-y-1">
+            <SidebarItem>Posts</SidebarItem>
+            <SidebarItem>Pages</SidebarItem>
+            <SidebarItem>Media Library</SidebarItem>
+          </div>
+        )}
+      </div>
+    </nav>
+  </SidebarContent>
+</Sidebar>
+```
+
+### Mobile-Responsive Sidebar
+
+```tsx
+const [isMobileOpen, setIsMobileOpen] = useState(false)
+
+<div className="flex h-screen">
+  {/* Mobile backdrop */}
+  {isMobileOpen && (
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 lg:hidden z-40"
+      onClick={() => setIsMobileOpen(false)}
+    />
+  )}
+  
+  {/* Sidebar */}
+  <div className={`
+    fixed inset-y-0 left-0 z-50 lg:static lg:z-auto
+    transform transition-transform duration-300 ease-in-out
+    ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+  `}>
+    <Sidebar>
+      <SidebarHeader>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">App</h2>
+          <button
+            onClick={() => setIsMobileOpen(false)}
+            className="lg:hidden p-2 hover:bg-gray-100 rounded"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      </SidebarHeader>
+      
+      <SidebarContent>
+        <nav>
+          <SidebarItem icon={<Home />} active>
+            Dashboard
+          </SidebarItem>
+          <SidebarItem icon={<Users />}>
+            Users
+          </SidebarItem>
+        </nav>
+      </SidebarContent>
+    </Sidebar>
+  </div>
+  
+  {/* Main content */}
+  <div className="flex-1 lg:ml-0">
+    <header className="bg-white border-b p-4 lg:hidden">
+      <button
+        onClick={() => setIsMobileOpen(true)}
+        className="p-2 hover:bg-gray-100 rounded"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
+    </header>
+    
+    <main className="p-6">
+      {/* Page content */}
+    </main>
+  </div>
+</div>
+```
+
+### Sidebar with Search
+
+```tsx
+const [searchQuery, setSearchQuery] = useState('')
+const [filteredItems, setFilteredItems] = useState(navigationItems)
+
+useEffect(() => {
+  const filtered = navigationItems.filter(item =>
+    item.label.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  setFilteredItems(filtered)
+}, [searchQuery])
+
+<Sidebar>
+  <SidebarHeader>
+    <h2 className="text-lg font-semibold">Navigation</h2>
+    <SidebarTrigger />
+  </SidebarHeader>
+  
+  <SidebarContent>
+    <div className="p-3">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Input
+          type="search"
+          placeholder="Search navigation..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10"
+          size="sm"
+        />
+      </div>
+    </div>
+    
+    <nav className="px-3 space-y-1">
+      {filteredItems.length > 0 ? (
+        filteredItems.map((item) => (
+          <SidebarItem 
+            key={item.id} 
+            icon={item.icon} 
+            active={item.active}
+          >
+            {item.label}
+          </SidebarItem>
+        ))
+      ) : (
+        <div className="py-8 text-center">
+          <p className="text-sm text-gray-500">No items found</p>
+        </div>
+      )}
+    </nav>
+  </SidebarContent>
+</Sidebar>
+```
+
+## Accessibility
+
+- Keyboard navigation with Tab and Enter keys
+- Proper focus management for collapsible sidebar
+- ARIA labels for expand/collapse buttons
+- Screen reader support for navigation structure
+- Semantic HTML structure for navigation
+
+## Best Practices
+
+1. **Keep navigation concise** - Don't overcrowd the sidebar
+2. **Use clear icons** - Icons should be recognizable and consistent
+3. **Provide visual feedback** - Show active states and hover effects
+4. **Consider mobile** - Design for both desktop and mobile experiences
+5. **Group related items** - Use sections to organize navigation
+6. **Handle overflow** - Use scrolling for long navigation lists
+7. **Maintain state** - Preserve sidebar state across page navigation
