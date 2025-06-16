@@ -1,0 +1,469 @@
+# Theming
+
+Customize EndUI to match your brand and design system. EndUI uses CSS custom properties (variables) and Tailwind CSS for a flexible, maintainable theming system that supports light/dark modes and complete customization.
+
+## Design System Overview
+
+EndUI's theming system is built on several key principles:
+
+- **CSS Custom Properties**: Easy runtime theme switching and customization
+- **Semantic Color Names**: Colors are named by purpose, not appearance
+- **HSL Color Space**: More intuitive color manipulation and variations
+- **Dark Mode Support**: Built-in dark theme with automatic switching
+- **Component Variants**: Consistent styling patterns across all components
+
+## Color System
+
+### Semantic Color Tokens
+
+EndUI uses semantic color names that describe purpose rather than appearance:
+
+| Token | Purpose | Light Mode | Dark Mode |
+|-------|---------|------------|-----------|
+| `background` | Main page background | White | Dark gray |
+| `foreground` | Primary text color | Dark gray | Light gray |
+| `primary` | Brand colors, CTAs | Blue | Blue |
+| `secondary` | Secondary elements | Light gray | Medium gray |
+| `muted` | Subtle backgrounds | Off-white | Dark gray |
+| `destructive` | Errors, warnings | Red | Red |
+| `border` | Component borders | Light gray | Dark gray |
+| `input` | Form input borders | Light gray | Dark gray |
+| `ring` | Focus ring color | Blue | Blue |
+
+### Color Format
+
+All colors use HSL (Hue, Saturation, Lightness) format without the `hsl()` wrapper:
+
+```css
+/* Correct format */
+--primary: 222.2 47.4% 11.2%;
+
+/* Incorrect format */
+--primary: hsl(222.2, 47.4%, 11.2%);
+```
+
+This format allows Tailwind CSS to add opacity modifiers like `bg-primary/50`.
+
+## Default Theme
+
+### Light Mode Colors
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --radius: 0.5rem;
+}
+```
+
+### Dark Mode Colors
+
+```css
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+}
+```
+
+## Custom Themes
+
+### Creating a Brand Theme
+
+Override the default colors to match your brand:
+
+```css
+:root {
+  /* Brand primary colors */
+  --primary: 264 83% 58%; /* Purple */
+  --primary-foreground: 0 0% 100%;
+  
+  /* Brand secondary colors */
+  --secondary: 264 15% 95%; /* Light purple */
+  --secondary-foreground: 264 83% 25%;
+  
+  /* Custom accent color */
+  --accent: 168 76% 42%; /* Teal */
+  --accent-foreground: 0 0% 100%;
+  
+  /* Adjust other colors to complement brand */
+  --ring: 264 83% 58%;
+}
+
+.dark {
+  --primary: 264 83% 68%; /* Lighter purple for dark mode */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 264 20% 15%;
+  --secondary-foreground: 264 15% 85%;
+  --accent: 168 76% 52%;
+  --accent-foreground: 0 0% 100%;
+}
+```
+
+### Multiple Theme Support
+
+Create multiple themes using CSS classes:
+
+```css
+/* Ocean theme */
+.theme-ocean {
+  --primary: 201 96% 32%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 201 15% 95%;
+  --secondary-foreground: 201 96% 15%;
+  --accent: 172 66% 42%;
+  --accent-foreground: 0 0% 100%;
+}
+
+/* Forest theme */
+.theme-forest {
+  --primary: 142 76% 36%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142 15% 95%;
+  --secondary-foreground: 142 76% 20%;
+  --accent: 25 95% 53%;
+  --accent-foreground: 0 0% 100%;
+}
+
+/* Sunset theme */
+.theme-sunset {
+  --primary: 12 89% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 12 15% 95%;
+  --secondary-foreground: 12 89% 25%;
+  --accent: 280 83% 58%;
+  --accent-foreground: 0 0% 100%;
+}
+```
+
+Apply themes dynamically:
+
+```tsx
+function ThemeSwitcher() {
+  const [theme, setTheme] = useState('default')
+  
+  useEffect(() => {
+    document.body.className = theme === 'default' ? '' : `theme-${theme}`
+  }, [theme])
+  
+  return (
+    <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+      <option value="default">Default</option>
+      <option value="ocean">Ocean</option>
+      <option value="forest">Forest</option>
+      <option value="sunset">Sunset</option>
+    </select>
+  )
+}
+```
+
+## Dark Mode Implementation
+
+### Automatic System Preference
+
+Respect user's system preference:
+
+```tsx
+'use client'
+
+import { useEffect, useState } from 'react'
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  
+  useEffect(() => {
+    // Check system preference
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    setTheme(mediaQuery.matches ? 'dark' : 'light')
+    
+    // Listen for changes
+    const handler = (e: MediaQueryListEvent) => {
+      setTheme(e.matches ? 'dark' : 'light')
+    }
+    
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
+  }, [])
+  
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark')
+  }, [theme])
+  
+  return (
+    <div className={theme}>
+      {children}
+    </div>
+  )
+}
+```
+
+### Manual Theme Toggle
+
+Allow users to override system preference:
+
+```tsx
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
+import { Button } from 'endui'
+
+export function ThemeToggle() {
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
+  
+  useEffect(() => {
+    const stored = localStorage.getItem('theme') as 'light' | 'dark' | 'system'
+    if (stored) {
+      setTheme(stored)
+    }
+  }, [])
+  
+  useEffect(() => {
+    localStorage.setItem('theme', theme)
+    
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      document.documentElement.classList.toggle('dark', mediaQuery.matches)
+    } else {
+      document.documentElement.classList.toggle('dark', theme === 'dark')
+    }
+  }, [theme])
+  
+  const toggleTheme = () => {
+    setTheme(current => {
+      if (current === 'light') return 'dark'
+      if (current === 'dark') return 'system'
+      return 'light'
+    })
+  }
+  
+  return (
+    <Button variant="ghost" size="sm" onClick={toggleTheme}>
+      {theme === 'light' && <Sun className="h-4 w-4" />}
+      {theme === 'dark' && <Moon className="h-4 w-4" />}
+      {theme === 'system' && <span className="text-xs">SYS</span>}
+    </Button>
+  )
+}
+```
+
+## Component Customization
+
+### Custom Component Variants
+
+Extend existing components with new variants:
+
+```tsx
+// Custom button variants
+import { Button, buttonVariants } from 'endui'
+import { cva } from 'class-variance-authority'
+
+const customButtonVariants = cva(
+  // Base classes from original buttonVariants
+  '',
+  {
+    variants: {
+      variant: {
+        // Extend with custom variants
+        gradient: 'bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90',
+        outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground',
+        link: 'text-primary underline-offset-4 hover:underline',
+      },
+      size: {
+        xs: 'h-8 px-2 text-xs',
+        xl: 'h-14 px-8 text-lg',
+      }
+    }
+  }
+)
+
+// Usage
+<Button className={customButtonVariants({ variant: 'gradient', size: 'xl' })}>
+  Custom Button
+</Button>
+```
+
+### Creating Themed Components
+
+Build components that automatically adapt to your theme:
+
+```tsx
+import { Card, CardContent } from 'endui'
+import { cn } from 'endui/utils'
+
+interface FeatureCardProps {
+  title: string
+  description: string
+  icon: React.ReactNode
+  variant?: 'default' | 'premium' | 'enterprise'
+}
+
+export function FeatureCard({ 
+  title, 
+  description, 
+  icon, 
+  variant = 'default' 
+}: FeatureCardProps) {
+  return (
+    <Card className={cn(
+      'transition-all duration-200 hover:shadow-lg',
+      {
+        'border-primary/20 bg-primary/5': variant === 'premium',
+        'border-accent/20 bg-accent/5': variant === 'enterprise',
+      }
+    )}>
+      <CardContent className="p-6">
+        <div className={cn(
+          'mb-4 inline-flex p-3 rounded-lg',
+          {
+            'bg-primary/10 text-primary': variant === 'premium',
+            'bg-accent/10 text-accent': variant === 'enterprise',
+            'bg-muted text-muted-foreground': variant === 'default',
+          }
+        )}>
+          {icon}
+        </div>
+        <h3 className="text-lg font-semibold mb-2">{title}</h3>
+        <p className="text-muted-foreground">{description}</p>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+## Advanced Theming
+
+### CSS-in-JS Integration
+
+Use EndUI themes with styled-components or emotion:
+
+```tsx
+import styled from 'styled-components'
+
+const ThemedContainer = styled.div`
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  
+  &:hover {
+    background: hsl(var(--muted));
+  }
+`
+```
+
+### Design Tokens Integration
+
+Export theme tokens for design tools:
+
+```json
+{
+  "color": {
+    "primary": {
+      "50": "hsl(222 47% 95%)",
+      "100": "hsl(222 47% 85%)",
+      "500": "hsl(222 47% 50%)",
+      "900": "hsl(222 47% 11%)"
+    },
+    "semantic": {
+      "background": "hsl(var(--background))",
+      "foreground": "hsl(var(--foreground))",
+      "primary": "hsl(var(--primary))",
+      "destructive": "hsl(var(--destructive))"
+    }
+  },
+  "spacing": {
+    "radius": "var(--radius)"
+  }
+}
+```
+
+### Theme Validation
+
+Validate theme completeness:
+
+```tsx
+const requiredTokens = [
+  'background', 'foreground', 'primary', 'primary-foreground',
+  'secondary', 'secondary-foreground', 'muted', 'muted-foreground',
+  'accent', 'accent-foreground', 'destructive', 'destructive-foreground',
+  'border', 'input', 'ring', 'radius'
+]
+
+function validateTheme() {
+  const root = document.documentElement
+  const computedStyle = getComputedStyle(root)
+  
+  const missing = requiredTokens.filter(token => {
+    const value = computedStyle.getPropertyValue(`--${token}`)
+    return !value || value.trim() === ''
+  })
+  
+  if (missing.length > 0) {
+    console.warn('Missing theme tokens:', missing)
+  }
+  
+  return missing.length === 0
+}
+```
+
+## Best Practices
+
+### Theme Organization
+
+1. **Use semantic naming** - Name colors by purpose, not appearance
+2. **Maintain contrast ratios** - Ensure accessibility across all themes
+3. **Test both modes** - Verify themes work in light and dark modes
+4. **Document custom tokens** - Provide clear documentation for theme customization
+5. **Version your themes** - Track theme changes alongside component updates
+
+### Performance Considerations
+
+1. **Minimize CSS custom properties** - Only define what you need
+2. **Use CSS containment** - Isolate theme changes to specific components
+3. **Lazy load themes** - Load additional themes only when needed
+4. **Cache theme preferences** - Store user preferences in localStorage
+
+### Accessibility
+
+1. **Maintain contrast ratios** - Follow WCAG guidelines for all color combinations
+2. **Test with screen readers** - Ensure themes don't break assistive technology
+3. **Provide high contrast options** - Offer themes for users with visual impairments
+4. **Respect motion preferences** - Consider prefers-reduced-motion for theme transitions
+
+---
+
+Ready to customize your theme? Start with our [color palette generator](/tools/colors) or explore [theme examples](/examples/themes).

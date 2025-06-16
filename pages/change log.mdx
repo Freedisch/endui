@@ -1,0 +1,192 @@
+# Changelog
+
+All notable changes to EndUI will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- New `LoadingSpinner` component for better loading states
+- `Badge` component with multiple variants
+- Enhanced accessibility features across all components
+- Dark mode support improvements
+
+### Changed
+- Improved TypeScript definitions for better IntelliSense
+- Updated dependencies to latest stable versions
+- Enhanced documentation with more examples
+
+### Fixed
+- Fixed focus management in Modal component
+- Resolved styling conflicts with custom CSS
+
+## [1.0.0] - 2024-03-15
+
+### Added
+- Initial release of EndUI component library
+- Core components: Button, Card, Alert, Input, Modal, Tabs, Table, Pagination, Sidebar, Heading
+- Complete TypeScript support
+- Tailwind CSS integration
+- Comprehensive documentation
+- Accessibility features built-in
+- Dark mode support
+- Theme customization system
+
+### Components Included
+- **Button**: Multiple variants (default, ghost) and sizes (sm, default, lg)
+- **Card**: Flexible container with header, content, and footer sections
+- **Alert**: Notification component with success, warning, error, and info variants
+- **Input**: Form input with validation support and multiple types
+- **Modal**: Accessible dialog system with backdrop and focus management
+- **Tabs**: Content organization with keyboard navigation
+- **Table**: Data display with semantic markup and responsive design
+- **Pagination**: Smart page navigation with customizable options
+- **Sidebar**: Collapsible navigation with context API
+- **Heading**: Semantic typography with size and color variants
+
+### Developer Experience
+- Complete TypeScript definitions
+- IntelliSense support in IDEs
+- Comprehensive documentation with examples
+- Storybook integration
+- ESLint and Prettier configurations
+
+### Accessibility
+- WCAG 2.1 AA compliance
+- Keyboard navigation support
+- Screen reader compatibility
+- Focus management
+- Proper ARIA attributes
+
+### Theming
+- CSS custom properties for easy customization
+- Light and dark mode support
+- Brand color integration
+- Component variant system
+- Responsive design utilities
+
+## Migration Guide
+
+### From Beta to 1.0.0
+
+If you were using the beta version, here are the breaking changes:
+
+#### Button Component
+```tsx
+// Before (Beta)
+<Button type="primary">Click me</Button>
+
+// After (1.0.0)
+<Button variant="default">Click me</Button>
+```
+
+#### Card Component
+```tsx
+// Before (Beta)
+<Card>
+  <Card.Header>Title</Card.Header>
+  <Card.Body>Content</Card.Body>
+</Card>
+
+// After (1.0.0)
+<Card>
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+  </CardHeader>
+  <CardContent>Content</CardContent>
+</Card>
+```
+
+#### Import Changes
+```tsx
+// Before (Beta)
+import { Button } from 'endui/components'
+
+// After (1.0.0)
+import { Button } from 'endui'
+```
+
+## Version Support
+
+| Version | Status | End of Support |
+|---------|--------|----------------|
+| 1.x | ✅ Active | TBD |
+| 0.x (Beta) | ❌ End of Life | 2024-03-15 |
+
+## Upcoming Features
+
+### Version 1.1.0 (Planned)
+- **New Components**
+  - Dropdown Menu
+  - Date Picker
+  - Tooltip
+  - Progress Bar
+  - Skeleton Loader
+
+- **Enhancements**
+  - Improved animation system
+  - Better mobile responsiveness
+  - Enhanced theme customization
+  - Performance optimizations
+
+### Version 1.2.0 (Planned)
+- **Advanced Components**
+  - Data Table with sorting and filtering
+  - Rich Text Editor
+  - File Upload
+  - Calendar
+  - Command Palette
+
+- **Developer Tools**
+  - CLI for component generation
+  - VS Code extension
+  - Figma plugin
+  - Design tokens export
+
+### Version 2.0.0 (Future)
+- **Breaking Changes**
+  - React 19 support
+  - Modern CSS features (Container Queries, CSS Grid Level 3)
+  - Tree-shaking improvements
+  - Bundle size optimizations
+
+- **New Architecture**
+  - Headless component variants
+  - Better server-side rendering support
+  - Enhanced theming system
+  - Component composition improvements
+
+## Security
+
+### Reporting Security Issues
+
+If you discover a security vulnerability in EndUI, please report it to [security@endui.dev](mailto:security@endui.dev). We take security issues seriously and will respond promptly.
+
+### Security Updates
+
+Security updates will be released as patch versions and clearly marked in the changelog. We recommend staying up to date with the latest version.
+
+## Contributing
+
+We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details on:
+
+- Reporting bugs
+- Requesting features
+- Submitting pull requests
+- Development setup
+- Code standards
+
+
+## License
+
+EndUI is released under the [MIT License](LICENSE.md).
+
+## Community
+
+- **GitHub**: [https://github.com/freedisch/endui](https://github.com/freedisch/endui)
+- **Discord**: [Join our community](https://discord.gg/endui)
+- **Twitter**: [@enduikit](https://twitter.com/freedisch)
+- **Documentation**: [https://endui-9p9tj6ttz-freedischs-projects.vercel.app/](https://endui-9p9tj6ttz-freedischs-projects.vercel.app/)
+
+---
+
+For the complete version history, see the [GitHub Releases](https://github.com/freedisch/endui/releases) page.

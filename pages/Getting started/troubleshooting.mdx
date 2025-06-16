@@ -1,0 +1,505 @@
+# Troubleshooting
+
+Common issues and solutions when working with EndUI. This guide covers installation problems, styling issues, TypeScript errors, and performance optimization tips.
+
+## Installation Issues
+
+### NPM/Yarn Installation Failures
+
+**Problem**: Installation fails with peer dependency conflicts
+
+```bash
+npm ERR! peer dep missing: react@>=16.8.0
+```
+
+**Solution**: Ensure you have compatible React version
+```bash
+# Check your React version
+npm list react
+
+# Update React if needed
+npm install react@^18.0.0 react-dom@^18.0.0
+
+# Clear cache and reinstall
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### TypeScript Module Resolution
+
+**Problem**: TypeScript can't find EndUI modules
+
+```typescript
+Cannot find module 'endui' or its corresponding type declarations.
+```
+
+**Solutions**:
+
+1. **Install type definitions**:
+```bash
+npm install --save-dev @types/react @types/react-dom
+```
+
+2. **Update tsconfig.json**:
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+3. **Restart TypeScript server** in your IDE
+
+### Missing Peer Dependencies
+
+**Problem**: Components don't work due to missing dependencies
+
+**Solution**: Install all required peer dependencies
+```bash
+npm install @radix-ui/react-dialog @radix-ui/react-tabs class-variance-authority clsx tailwind-merge lucide-react
+```
+
+## Styling Issues
+
+### Components Not Styled
+
+**Problem**: Components appear unstyled or with minimal styling
+
+**Common Causes & Solutions**:
+
+1. **Tailwind CSS not configured**:
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/endui/**/*.{js,ts,jsx,tsx}", // Add this line
+  ],
+  // ... rest of config
+}
+```
+
+2. **CSS not imported**:
+```css
+/* In your main CSS file */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* EndUI base styles */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    /* ... other CSS variables */
+  }
+}
+```
+
+3. **Incorrect import order**:
+```tsx
+// Correct order
+import 'your-styles.css'
+import { Button } from 'endui'
+
+// Incorrect - styles imported after components
+import { Button } from 'endui'
+import 'your-styles.css'
+```
+
+### Dark Mode Not Working
+
+**Problem**: Dark mode styles not applying
+
+**Solutions**:
+
+1. **Check dark mode class**:
+```html
+<!-- Ensure 'dark' class is on html or body -->
+<html class="dark">
+  <!-- Your app -->
+</html>
+```
+
+2. **Verify CSS variables**:
+```css
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  /* ... other dark mode variables */
+}
+```
+
+3. **Theme provider setup**:
+```tsx
+// If using a theme provider
+<ThemeProvider defaultTheme="dark">
+  <App />
+</ThemeProvider>
+```
+
+### Custom Styles Not Applied
+
+**Problem**: Custom styles are overridden by EndUI defaults
+
+**Solutions**:
+
+1. **Use proper CSS specificity**:
+```css
+/* Instead of */
+.my-button {
+  background: red;
+}
+
+/* Use */
+.my-custom-button.my-custom-button {
+  background: red;
+}
+```
+
+2. **Use Tailwind's !important modifier**:
+```tsx
+<Button className="!bg-red-500">Custom Button</Button>
+```
+
+3. **Use CSS-in-JS with higher specificity**:
+```tsx
+const CustomButton = styled(Button)`
+  && {
+    background-color: red;
+  }
+`
+```
+
+## Component-Specific Issues
+
+### Modal/Dialog Issues
+
+**Problem**: Modal doesn't close when clicking backdrop
+
+**Solutions**:
+
+1. **Check event propagation**:
+```tsx
+// Ensure modal content doesn't stop propagation
+<ModalContent onClick={(e) => e.stopPropagation()}>
+  {/* Modal content */}
+</ModalContent>
+```
+
+2. **Verify portal mounting**:
+```tsx
+// Check if portal root exists
+if (typeof document !== 'undefined') {
+  const portalRoot = document.getElementById('portal-root')
+  if (!portalRoot) {
+    const div = document.createElement('div')
+    div.id = 'portal-root'
+    document.body.appendChild(div)
+  }
+}
+```
+
+### Form Input Issues
+
+**Problem**: Input validation not working
+
+**Solutions**:
+
+1. **Controlled vs uncontrolled components**:
+```tsx
+// Controlled (recommended)
+const [value, setValue] = useState('')
+<Input value={value} onChange={(e) => setValue(e.target.value)} />
+
+// Uncontrolled
+<Input defaultValue="initial" />
+```
+
+2. **Form submission handling**:
+```tsx
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault() // Prevent default form submission
+  // Handle form data
+}
+```
+
+### Table Rendering Issues
+
+**Problem**: Table data not updating or rendering incorrectly
+
+**Solutions**:
+
+1. **Proper key props**:
+```tsx
+{data.map((item) => (
+  <TableRow key={item.id}> {/* Use unique, stable keys */}
+    <TableCell>{item.name}</TableCell>
+  </TableRow>
+))}
+```
+
+2. **Handle empty states**:
+```tsx
+{data.length === 0 ? (
+  <TableRow>
+    <TableCell colSpan={columnCount}>No data available</TableCell>
+  </TableRow>
+) : (
+  data.map(item => (
+    <TableRow key={item.id}>
+      {/* Table cells */}
+    </TableRow>
+  ))
+)}
+```
+
+## Performance Issues
+
+### Slow Rendering
+
+**Problem**: Components render slowly or cause lag
+
+**Solutions**:
+
+1. **Memoize expensive computations**:
+```tsx
+const ExpensiveComponent = ({ data }) => {
+  const processedData = useMemo(() => {
+    return data.map(item => ({ ...item, processed: true }))
+  }, [data])
+
+  return <Table data={processedData} />
+}
+```
+
+2. **Use React.memo for pure components**:
+```tsx
+const TableRow = React.memo(({ item }) => (
+  <tr>
+    <td>{item.name}</td>
+    <td>{item.value}</td>
+  </tr>
+))
+```
+
+3. **Virtualize large lists**:
+```tsx
+// For large datasets, consider virtualization
+import { FixedSizeList as List } from 'react-window'
+
+const VirtualizedTable = ({ items }) => (
+  <List
+    height={400}
+    itemCount={items.length}
+    itemSize={50}
+  >
+    {({ index, style }) => (
+      <div style={style}>
+        <TableRow item={items[index]} />
+      </div>
+    )}
+  </List>
+)
+```
+
+### Bundle Size Issues
+
+**Problem**: Large bundle size affecting load times
+
+**Solutions**:
+
+1. **Tree shaking verification**:
+```tsx
+// Good - tree-shakeable imports
+import { Button, Card } from 'endui'
+
+// Avoid - imports entire library
+import * as EndUI from 'endui'
+```
+
+2. **Analyze bundle**:
+```bash
+# Using webpack-bundle-analyzer
+npm install --save-dev webpack-bundle-analyzer
+npm run build -- --analyze
+```
+
+3. **Lazy loading components**:
+```tsx
+const HeavyComponent = React.lazy(() => import('./HeavyComponent'))
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HeavyComponent />
+    </Suspense>
+  )
+}
+```
+
+## Framework-Specific Issues
+
+### Next.js Issues
+
+**Problem**: Hydration mismatches or SSR issues
+
+**Solutions**:
+
+1. **Client-side only components**:
+```tsx
+import dynamic from 'next/dynamic'
+
+const ClientOnlyComponent = dynamic(
+  () => import('./ClientOnlyComponent'),
+  { ssr: false }
+)
+```
+
+2. **Suppress hydration warnings** (use sparingly):
+```tsx
+<div suppressHydrationWarning>
+  {/* Content that differs between server and client */}
+</div>
+```
+
+### Vite Issues
+
+**Problem**: Import issues or build failures
+
+**Solutions**:
+
+1. **Update vite.config.js**:
+```javascript
+export default defineConfig({
+  optimizeDeps: {
+    include: ['endui', '@radix-ui/react-dialog', '@radix-ui/react-tabs']
+  }
+})
+```
+
+2. **Resolve alias issues**:
+```javascript
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  }
+})
+```
+
+## Browser Compatibility
+
+### Internet Explorer Support
+
+**Problem**: Components don't work in older browsers
+
+**Solution**: EndUI supports modern browsers only. For IE support, consider:
+
+1. **Use a polyfill service**:
+```html
+<script src="https://polyfill.io/v3/polyfill.min.js"></script>
+```
+
+2. **Use a different UI library** for IE support requirements
+
+### Safari-Specific Issues
+
+**Problem**: Styling or interaction issues in Safari
+
+**Solutions**:
+
+1. **CSS vendor prefixes**:
+```css
+.component {
+  -webkit-appearance: none;
+  appearance: none;
+}
+```
+
+2. **Touch event handling**:
+```tsx
+// Add touch event listeners for mobile Safari
+<button
+  onTouchStart={() => {}}
+  onClick={handleClick}
+>
+  Button
+</button>
+```
+
+## Debugging Tips
+
+### Component Debug Mode
+
+Enable detailed logging for development:
+
+```tsx
+// Add to your development environment
+if (process.env.NODE_ENV === 'development') {
+  // Enable React DevTools
+  window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.onCommitFiberRoot = (id, root) => {
+    console.log('Component tree updated:', root)
+  }
+}
+```
+
+### Style Debugging
+
+1. **Use browser dev tools**:
+   - Inspect element styles
+   - Check computed styles
+   - Verify CSS custom properties
+
+2. **Add debug styles**:
+```css
+/* Temporary debugging styles */
+* {
+  outline: 1px solid red !important;
+}
+```
+
+3. **Tailwind CSS debugging**:
+```bash
+# Check if Tailwind classes are being purged
+npm run build -- --debug
+```
+
+## Getting Help
+
+### Before Asking for Help
+
+1. **Check the documentation** - Most issues are covered in our guides
+2. **Search existing issues** - Someone might have faced the same problem
+3. **Create a minimal reproduction** - Isolate the issue in a simple example
+4. **Gather environment info** - Include versions, browser, and configuration
+
+### Reporting Issues
+
+When reporting a bug, include:
+
+```markdown
+**Environment:**
+- EndUI version: 1.0.0
+- React version: 18.2.0
+- Browser: Chrome 120
+- OS: macOS 14
+
+**Steps to reproduce:**
+1. Install EndUI
+2. Add Button component
+3. Click button
+
+**Expected behavior:**
+Button should handle click
+
+**Actual behavior:**
+Nothing happens
+
+**Code example:**

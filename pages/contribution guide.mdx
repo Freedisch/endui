@@ -1,0 +1,489 @@
+# Contributing to EndUI
+
+Thank you for your interest in contributing to EndUI! This guide will help you get started with contributing to our component library. Whether you're fixing bugs, adding features, or improving documentation, your contributions are welcome.
+
+## Table of Contents
+
+- [Code of Conduct](#code-of-conduct)
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [Project Structure](#project-structure)
+- [Contributing Guidelines](#contributing-guidelines)
+- [Submitting Changes](#submitting-changes)
+- [Component Development](#component-development)
+- [Documentation](#documentation)
+- [Testing](#testing)
+- [Release Process](#release-process)
+
+## Code of Conduct
+
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it to understand the expectations for all contributors.
+
+## Getting Started
+
+### Ways to Contribute
+
+- **🐛 Bug Reports**: Help us identify and fix issues
+- **✨ Feature Requests**: Suggest new components or improvements
+- **📝 Documentation**: Improve guides, examples, and API docs
+- **🎨 Design**: Contribute to design system and component specifications
+- **💻 Code**: Implement new features, fix bugs, or optimize performance
+- **🧪 Testing**: Add test coverage or improve testing infrastructure
+
+### Before You Start
+
+1. **Check existing issues**: Search [GitHub Issues](https://github.com/freedisch/endui/issues) to see if your bug or feature request already exists
+2. **Start small**: Consider beginning with documentation improvements or small bug fixes
+3. **Discuss big changes**: For major features, create an issue first to discuss the approach
+
+## Development Setup
+
+### Prerequisites
+
+- **Node.js**: Version 18.0.0 or later
+- **npm**: Version 8.0.0 or later (or yarn/pnpm equivalent)
+- **Git**: For version control
+
+### Local Development
+
+1. **Fork and clone the repository**:
+```bash
+git clone https://github.com/yourusername/endui.git
+cd endui
+```
+
+2. **Install dependencies**:
+```bash
+npm install
+```
+
+3. **Start development server**:
+```bash
+npm run dev
+```
+
+4. **Run Storybook** (for component development):
+```bash
+npm run storybook
+```
+
+5. **Run tests**:
+```bash
+npm test
+```
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build the library for production |
+| `npm run test` | Run test suite |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run lint` | Run ESLint |
+| `npm run lint:fix` | Fix ESLint issues automatically |
+| `npm run type-check` | Run TypeScript type checking |
+| `npm run storybook` | Start Storybook development server |
+| `npm run build-storybook` | Build Storybook for production |
+
+## Project Structure
+
+```
+endui/
+├── src/
+│   ├── components/           # Component implementations
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.test.tsx
+│   │   │   ├── Button.stories.tsx
+│   │   │   └── index.ts
+│   │   └── ...
+│   ├── utils/               # Utility functions
+│   ├── hooks/               # Custom React hooks
+│   └── index.ts            # Main export file
+├── docs/                   # Documentation files
+├── examples/               # Example applications
+├── .storybook/            # Storybook configuration
+├── tests/                 # Test utilities and setup
+└── scripts/               # Build and utility scripts
+```
+
+## Contributing Guidelines
+
+### Git Workflow
+
+1. **Create a feature branch**:
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/your-bug-fix
+```
+
+2. **Make your changes** with clear, focused commits
+
+3. **Write descriptive commit messages**:
+```bash
+git commit -m "feat(Button): add loading state variant
+
+- Add isLoading prop to Button component
+- Include loading spinner from Lucide React
+- Update documentation and examples
+- Add tests for loading behavior"
+```
+
+### Commit Message Convention
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `chore`: Build process or auxiliary tool changes
+
+**Examples:**
+```bash
+feat(Alert): add dismissible functionality
+fix(Modal): resolve focus trap issue on mobile
+docs(Button): update examples with new variants
+test(Input): add validation test cases
+```
+
+### Code Standards
+
+#### TypeScript
+- Use strict TypeScript configuration
+- Provide comprehensive type definitions
+- Export all component prop interfaces
+- Use generic types where appropriate
+
+```tsx
+// Good
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'default' | 'ghost'
+  size?: 'sm' | 'default' | 'lg'
+  isLoading?: boolean
+}
+
+// Bad
+interface ButtonProps {
+  variant: string
+  size: string
+  isLoading: any
+}
+```
+
+#### React Best Practices
+- Use functional components with hooks
+- Implement `forwardRef` for DOM element access
+- Use `displayName` for better debugging
+- Handle edge cases and provide fallbacks
+
+```tsx
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, isLoading, children, ...props }, ref) => {
+    return (
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={isLoading}
+        {...props}
+      >
+        {isLoading && <LoadingSpinner />}
+        {children}
+      </button>
+    )
+  }
+)
+
+Button.displayName = 'Button'
+```
+
+#### Styling Guidelines
+- Use Tailwind CSS utility classes
+- Implement proper dark mode support
+- Ensure responsive design
+- Follow accessibility guidelines
+
+#### File Naming
+- Use PascalCase for component files: `Button.tsx`
+- Use camelCase for utility files: `formatDate.ts`
+- Use kebab-case for documentation: `getting-started.md`
+
+## Component Development
+
+### Creating a New Component
+
+1. **Create component directory**:
+```bash
+mkdir src/components/YourComponent
+cd src/components/YourComponent
+```
+
+2. **Component implementation** (`YourComponent.tsx`):
+```tsx
+'use client'
+
+import React from 'react'
+import { VariantProps, cva } from 'class-variance-authority'
+import { cn } from '../../utils/utils'
+
+const yourComponentVariants = cva(
+  'base classes here',
+  {
+    variants: {
+      variant: {
+        default: 'default styles',
+        secondary: 'secondary styles',
+      },
+      size: {
+        sm: 'small styles',
+        default: 'default styles',
+        lg: 'large styles',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+)
+
+export interface YourComponentProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof yourComponentVariants> {
+  // Additional props here
+}
+
+const YourComponent = React.forwardRef<HTMLDivElement, YourComponentProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return (
+      <div
+        className={cn(yourComponentVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+
+YourComponent.displayName = 'YourComponent'
+
+export { YourComponent, yourComponentVariants }
+```
+
+3. **Tests** (`YourComponent.test.tsx`):
+```tsx
+import { render, screen } from '@testing-library/react'
+import { YourComponent } from './YourComponent'
+
+describe('YourComponent', () => {
+  it('renders correctly', () => {
+    render(<YourComponent>Test content</YourComponent>)
+    expect(screen.getByText('Test content')).toBeInTheDocument()
+  })
+
+  it('applies variant classes correctly', () => {
+    const { container } = render(
+      <YourComponent variant="secondary">Content</YourComponent>
+    )
+    expect(container.firstChild).toHaveClass('secondary-class')
+  })
+})
+```
+
+4. **Storybook stories** (`YourComponent.stories.tsx`):
+```tsx
+import type { Meta, StoryObj } from '@storybook/react'
+import { YourComponent } from './YourComponent'
+
+const meta: Meta<typeof YourComponent> = {
+  title: 'Components/YourComponent',
+  component: YourComponent,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'secondary'],
+    },
+  },
+}
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  args: {
+    children: 'Your Component',
+  },
+}
+
+export const Secondary: Story = {
+  args: {
+    variant: 'secondary',
+    children: 'Secondary Variant',
+  },
+}
+```
+
+5. **Export from index** (`index.ts`):
+```tsx
+export { YourComponent, yourComponentVariants } from './YourComponent'
+export type { YourComponentProps } from './YourComponent'
+```
+
+6. **Update main index**:
+Add your component to `src/index.ts`
+
+### Component Checklist
+
+Before submitting a new component, ensure:
+
+- [ ] **Accessibility**: WCAG 2.1 AA compliant
+- [ ] **TypeScript**: Complete type definitions
+- [ ] **Responsive**: Works on all screen sizes
+- [ ] **Dark Mode**: Supports light and dark themes
+- [ ] **Tests**: Comprehensive test coverage
+- [ ] **Documentation**: Storybook stories and examples
+- [ ] **Performance**: No unnecessary re-renders
+- [ ] **Browser Support**: Works in modern browsers
+
+## Documentation
+
+### Writing Documentation
+
+1. **Component docs**: Follow the established format in `/docs/components/`
+2. **Include examples**: Provide practical, real-world examples
+3. **API reference**: Document all props, types, and variants
+4. **Accessibility notes**: Include WCAG compliance information
+
+### Documentation Standards
+
+- Use clear, concise language
+- Include code examples for all features
+- Provide context for when to use components
+- Explain accessibility considerations
+- Include troubleshooting tips
+
+## Testing
+
+### Testing Strategy
+
+- **Unit Tests**: Test component behavior and props
+- **Integration Tests**: Test component interactions
+- **Accessibility Tests**: Ensure WCAG compliance
+- **Visual Tests**: Storybook visual regression testing
+
+### Writing Tests
+
+```tsx
+import { render, screen, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { Button } from './Button'
+
+describe('Button', () => {
+  it('handles click events', async () => {
+    const handleClick = jest.fn()
+    render(<Button onClick={handleClick}>Click me</Button>)
+    
+    await userEvent.click(screen.getByRole('button'))
+    expect(handleClick).toHaveBeenCalledTimes(1)
+  })
+
+  it('is accessible', () => {
+    render(<Button>Accessible button</Button>)
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
+})
+```
+
+## Submitting Changes
+
+### Pull Request Process
+
+1. **Ensure tests pass**: Run `npm test` and fix any failures
+2. **Update documentation**: Include relevant documentation changes
+3. **Add changeset**: Run `npm run changeset` for version tracking
+4. **Create pull request**: Use the provided template
+5. **Request review**: Tag relevant maintainers
+
+### Pull Request Template
+
+```markdown
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation update
+- [ ] Refactoring
+
+## Testing
+- [ ] Tests pass locally
+- [ ] Added tests for new functionality
+- [ ] Tested in multiple browsers
+
+## Documentation
+- [ ] Updated component documentation
+- [ ] Added/updated Storybook stories
+- [ ] Updated changelog
+
+## Screenshots (if applicable)
+Include screenshots for UI changes
+```
+
+### Review Process
+
+1. **Automated checks**: CI/CD pipeline runs tests and linting
+2. **Maintainer review**: Code quality and design consistency
+3. **Community feedback**: Open for community input
+4. **Approval**: Requires approval from core maintainers
+5. **Merge**: Squash and merge to main branch
+
+## Release Process
+
+EndUI uses [Changesets](https://github.com/freedisch/changesets) for version management:
+
+1. **Add changeset**: `npm run changeset`
+2. **Select change type**: patch, minor, or major
+3. **Write summary**: Describe the change for users
+4. **Commit changeset**: Include in your pull request
+
+### Version Bumping
+
+- **Patch** (1.0.X): Bug fixes, documentation updates
+- **Minor** (1.X.0): New features, non-breaking changes
+- **Major** (X.0.0): Breaking changes
+
+## Getting Help
+
+### Community Resources
+
+- **GitHub Discussions**: [Ask questions](https://github.com/freedisch/endui/discussions)
+- **Discord**: [Join our community](https://discord.gg/endui)
+- **Documentation**: [Read the docs](https://endui-9p9tj6ttz-freedischs-projects.vercel.app)
+
+### Maintainer Contact
+
+- **Core Team**: @endui/core-team
+- **Security**: security@endui.dev
+- **General**: hello@endui.dev
+
+---
+
+Thank you for contributing to EndUI! Your efforts help make web development more accessible and enjoyable for everyone. 🎉

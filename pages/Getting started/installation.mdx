@@ -1,3 +1,429 @@
 # Installation
 
-Satori (悟り) is a Japanese Buddhist term for awakening, "comprehension; understanding".
+Get started with EndUI in your React application. This guide covers everything you need to set up EndUI, from basic installation to advanced configuration options.
+
+## Prerequisites
+
+Before installing EndUI, ensure your project meets these requirements:
+
+- **React**: Version 16.8.0 or later (hooks support required)
+- **Node.js**: Version 14.0.0 or later
+- **Package Manager**: npm, yarn, or pnpm
+- **TypeScript**: Version 4.5.0 or later (optional but recommended)
+
+## Quick Start
+
+### 1. Install EndUI
+
+Choose your preferred package manager:
+
+```bash
+# npm
+npm install endui
+
+# yarn
+yarn add endui
+
+# pnpm
+pnpm add endui
+```
+
+### 2. Install Peer Dependencies
+
+EndUI requires several peer dependencies for full functionality:
+
+```bash
+# npm
+npm install react react-dom @radix-ui/react-dialog @radix-ui/react-tabs class-variance-authority clsx tailwind-merge lucide-react
+
+# yarn
+yarn add react react-dom @radix-ui/react-dialog @radix-ui/react-tabs class-variance-authority clsx tailwind-merge lucide-react
+
+# pnpm
+pnpm add react react-dom @radix-ui/react-dialog @radix-ui/react-tabs class-variance-authority clsx tailwind-merge lucide-react
+```
+
+### 3. Install Tailwind CSS
+
+EndUI uses Tailwind CSS for styling. If you don't have it installed:
+
+```bash
+# npm
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+# yarn
+yarn add -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+# pnpm
+pnpm add -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+## Framework-Specific Setup
+
+### Next.js App Router
+
+For Next.js 13+ with App Router:
+
+```bash
+npx create-next-app@latest my-app --typescript --tailwind --eslint
+cd my-app
+npm install endui
+```
+
+**app/layout.tsx**
+```tsx
+import './globals.css'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+### Next.js Pages Router
+
+For Next.js with Pages Router:
+
+**pages/_app.tsx**
+```tsx
+import '@/styles/globals.css'
+import type { AppProps } from 'next/app'
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />
+}
+```
+
+### Vite
+
+For Vite React applications:
+
+```bash
+npm create vite@latest my-app -- --template react-ts
+cd my-app
+npm install
+npm install endui
+```
+
+**src/main.tsx**
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+```
+
+### Create React App
+
+For Create React App projects:
+
+```bash
+npx create-react-app my-app --template typescript
+cd my-app
+npm install endui
+```
+
+**src/index.tsx**
+```tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+## Configuration
+
+### Tailwind CSS Configuration
+
+Update your `tailwind.config.js` to include EndUI paths and theme extensions:
+
+```js
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: ['class'],
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx}',
+    // Include EndUI components
+    './node_modules/endui/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+    },
+  },
+  plugins: [],
+}
+```
+
+### CSS Styles
+
+Add the EndUI base styles to your main CSS file:
+
+**globals.css / index.css**
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+```
+
+## TypeScript Configuration
+
+For optimal TypeScript support, update your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    // Path mapping for easier imports
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+```
+
+## Verify Installation
+
+Create a simple test component to verify everything is working:
+
+**src/App.tsx**
+```tsx
+import { Button, Card, CardHeader, CardTitle, CardContent, Alert, AlertDescription } from 'endui'
+
+function App() {
+  return (
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>EndUI Installation Successful! 🎉</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert variant="success">
+              <AlertDescription>
+                All components are working correctly. You're ready to build amazing UIs!
+              </AlertDescription>
+            </Alert>
+            
+            <div className="flex space-x-2">
+              <Button variant="default">Primary Button</Button>
+              <Button variant="ghost">Secondary Button</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+export default App
+```
+
+## Common Issues
+
+### Styling Not Applied
+
+If components appear unstyled:
+
+1. **Check Tailwind CSS setup**: Ensure Tailwind is properly configured and imported
+2. **Verify content paths**: Make sure your `tailwind.config.js` includes the correct paths
+3. **Import order**: Ensure Tailwind directives are imported before component styles
+
+### TypeScript Errors
+
+For TypeScript issues:
+
+1. **Install type definitions**: Ensure all dependencies have proper types
+2. **Update tsconfig.json**: Use the configuration provided above
+3. **Restart TypeScript server**: Reload your IDE's TypeScript service
+
+### Build Errors
+
+If you encounter build errors:
+
+1. **Check peer dependencies**: Ensure all required packages are installed
+2. **Update dependencies**: Use the latest compatible versions
+3. **Clear cache**: Remove `node_modules` and reinstall
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## What's Next?
+
+Now that EndUI is installed and configured:
+
+1. **Explore Components**: Check out our [component documentation](/components)
+2. **Learn Theming**: Customize EndUI with our [theming guide](/theming)
+3. **See Examples**: Browse [real-world examples](/examples)
+4. **Join Community**: Get help on [GitHub Discussions](https://github.com/freedisch/endui/discussions)
+
+## Getting Help
+
+If you run into issues:
+
+- **Documentation**: Check our comprehensive component docs
+- **GitHub Issues**: Report bugs or request features
+- **Discord Community**: Get real-time help from other developers
+- **Stack Overflow**: Search for existing solutions or ask questions
+
+---
+
+**Ready to build?** Start with our [Button component](/components/button) or explore the [component overview](/components).
